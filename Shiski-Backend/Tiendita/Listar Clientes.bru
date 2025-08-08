@@ -1,0 +1,15 @@
+meta {
+  name: Listar Clientes
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{local}}/clientes
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

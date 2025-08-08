@@ -1,0 +1,27 @@
+meta {
+  name: Crear Clientes
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{local}}/clientes
+  body: json
+  auth: inherit
+}
+
+params:query {
+  : 
+}
+
+body:json {
+  {
+    "nombre": "Jsus",
+    "email": "elcielito@gmail.com",
+    "direccion": "elcielito"
+  }
+}
+
+settings {
+  encodeUrl: true
+}
