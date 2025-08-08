@@ -62,13 +62,14 @@ public class SecurityConfig {
                         ).permitAll()
                         // Endpoints públicos
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/productos/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/productos/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/productos/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/cursos/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/cursos/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api//v1/cursos/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/cursos/**").hasAuthority("ROLE_ADMIN")
+
 
                         // Endpoints protegidos
-                        .requestMatchers("/api/clientes/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/usuarios/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
 
                         // Resto requiere autenticación
