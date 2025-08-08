@@ -1,0 +1,160 @@
+
+paths:
+  /api/cursos:
+    get:
+      summary: Obtener todos los cursos
+      description: Retorna la lista completa de cursos disponibles.
+      tags:
+        - Cursos
+      responses:
+        '200':
+          description: Lista de cursos obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Curso'
+
+    post:
+      summary: Crear un nuevo curso
+      description: Registra un nuevo curso. Requiere `ROLE_ADMIN`.
+      tags:
+        - Cursos
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CursoRequest'
+      responses:
+        '201':
+          description: Curso creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Curso'
+        '400':
+          description: Datos inválidos en la solicitud
+        '401':
+          description: No autorizado
+        '403':
+          description: Prohibido (se requiere rol administrador)
+
+  /api/cursos/{id}:
+    get:
+      summary: Obtener curso por ID
+      description: Retorna la información de un curso específico.
+      tags:
+        - Cursos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Curso encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Curso'
+        '404':
+          description: Curso no encontrado
+
+    put:
+      summary: Actualizar curso
+      description: Modifica los datos de un curso existente. Requiere `ROLE_ADMIN`.
+      tags:
+        - Cursos
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CursoRequest'
+      responses:
+        '200':
+          description: Curso actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Curso'
+        '400':
+          description: Datos inválidos
+        '404':
+          description: Curso no encontrado
+        '403':
+          description: Prohibido (se requiere rol administrador)
+
+    delete:
+      summary: Eliminar curso
+      description: Elimina un curso por su ID. Solo accesible para administradores.
+      tags:
+        - Curso
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Curso eliminado correctamente
+        '404':
+          description: Curso no encontrado
+        '403':
+          description: Prohibido (se requiere rol administrador)
+
+components:
+  schemas:
+    Curso:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        nombre:
+          type: string
+          example: Laptop Gamer
+        descripcion:
+          type: string
+          example: Laptop con procesador Intel i7 y 16GB de RAM
+        precio:
+          type: number
+          format: float
+          example: 2499.99
+        stock:
+          type: integer
+          example: 15
+        creadoEn:
+          type: string
+          format: date-time
+          example: 2025-08-05T15:00:00Z
+
+      CursoRequest:
+      type: object
+      required:
+        - nombre
+        - precio
+      properties:
+        nombre:
+          type: string
+          example: Laptop Gamer
+        descripcion:
+          type: string
+          example: Laptop con procesador Intel i7 y 16GB de RAM
+        precio:
+          type: number
+          format: float
+          example: 2499.99
+        stock:
+          type: integer
+          example: 15

@@ -1,0 +1,8 @@
+#configuración del perfil
+
+spring:
+  application:
+    name: tiendita
+  profiles:
+    active: local #Cambia a 'developer', 'production' según corresponda
+
