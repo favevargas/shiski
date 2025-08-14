@@ -15,8 +15,10 @@ export const courses = [
     },
     {
         id: 3,
-        name: "Platanos",
+        name: "Curso de logística 3",
         price: 15990,
         img: "https://duyou.com.mx/wp-content/uploads/2023/07/logistica-transporte-buques-carga-contenedores-aviones-carga-puente-grua-funcionamiento-astillero-al-amanecer-antecedentes-logisticos-industria-importacion-exportacion-transporte-ai-generativo-1-scaled.jpg",
     }
 ];
+
+   

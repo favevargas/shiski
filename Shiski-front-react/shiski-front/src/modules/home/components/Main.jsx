@@ -17,7 +17,7 @@ export default function Main() {
                 <div className="card-body d-flex flex-column">
                   <h5 className="card-title">{p.name}</h5>
                   <p className="card-text text-body-secondary mb-4">${p.price.toLocaleString('es-CL')}</p>
-                  <button className="btn btn-outline-primary mt-auto">Agregar al carrito</button>
+                  <button className="btn btn-outline-primary mt-auto">Detalle del curso</button>
                 </div>
               </div>
             </div>
