@@ -1,19 +1,36 @@
 import { Link } from "react-router-dom";
-
+import "../styles/Home.css";
+import { FaMapMarkerAlt, FaRoute } from "react-icons/fa";
 
 export default function Hero() {
   return (
-    <section className="bg-light py-5 border-bottom">
-      <div className="container py-4">
-        <div className="row align-items-center g-4">
-          <div className="col-lg-7">
-            <h1 className="display-5 fw-bold">Bienvenido a <span className="text-primary">Shiski</span></h1>
-            <p className="lead mb-4">UNA SOLUCIÓN PARA TU EMPRESA</p>
-            <Link to="/courses" className="btn btn-primary btn-lg">Conoce nuestros cursos</Link>
+    <section className="hero-section">
+      <div className="container">
+        <div className="row align-items-center">
+          <div className="col-lg-6">
+            <div className="hero-content">
+              <h1 className="hero-title">UNA SOLUCIÓN PARA TU EMPRESA</h1>
+              <p className="hero-description">
+                Optimiza tus operaciones logísticas y capacita a tu equipo con nuestros cursos especializados en transporte y logística
+              </p>
+              <div className="hero-cta">
+                <Link to="/business" className="btn btn-cta-home btn-lg">Cotizar ahora</Link>
+              </div>
+            </div>
           </div>
-          <div className="col-lg-5">
-            <div className="rounded-3 border bg-white p-4 text-center">
-              <p className="mb-0">Solicita una cotización</p>
+          <div className="col-lg-6">
+            <div className="hero-visual">
+              <div className="hero-image-container">
+                <div className="hero-overlay">
+                  <div className="route-marker start">
+                    <FaMapMarkerAlt />
+                  </div>
+                  <div className="route-line"></div>
+                  <div className="route-marker end">
+                    <FaMapMarkerAlt />
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

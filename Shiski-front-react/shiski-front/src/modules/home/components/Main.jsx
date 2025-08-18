@@ -1,29 +1,208 @@
-const MOCK = [
-    {id:1, name: "Curso de logística 1", price: 15990, img: 'https://static.vecteezy.com/system/resources/thumbnails/020/173/246/small_2x/smart-logistics-global-business-and-warehouse-technology-management-system-concept-businessman-using-tablet-control-delivery-network-distribution-import-export-double-exposure-future-transportation-photo.jpg'},
-    {id:2, name: "Curso de logística 2", price: 15990, img: 'https://mecaluxmx.cdnwm.com/img/blog/logistica-internacional.1.12.jpg'},
-    {id:3, name: "Curso de logística 3", price: 15990, img: 'https://duyou.com.mx/wp-content/uploads/2023/07/logistica-transporte-buques-carga-contenedores-aviones-carga-puente-grua-funcionamiento-astillero-al-amanecer-antecedentes-logisticos-industria-importacion-exportacion-transporte-ai-generativo-1-scaled.jpg'},
-]
+import { Link } from "react-router-dom";
+import { FaTruck, FaWarehouse, FaChartLine, FaUserTie, FaArrowRight, FaStar } from "react-icons/fa";
+
+const COURSES = [
+  {id:1, name: "Gestión de Cadena de Suministro", price: 79990, img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80'},
+  {id:2, name: "Logística Internacional", price: 89990, img: 'https://mecaluxmx.cdnwm.com/img/blog/logistica-internacional.1.12.jpg'},
+  {id:3, name: "Optimización de Rutas", price: 69990, img: 'https://duyou.com.mx/wp-content/uploads/2023/07/logistica-transporte-buques-carga-contenedores-aviones-carga-puente-grua-funcionamiento-astillero-al-amanecer-antecedentes-logisticos-industria-importacion-exportacion-transporte-ai-generativo-1-scaled.jpg'},
+];
+
+const BLOG_POSTS = [
+  {
+    id: 1,
+    title: "Las 5 Tendencias Clave que Están Revolucionando la Logística en 2023",
+    excerpt: "Descubre las innovaciones tecnológicas y estratégicas que están transformando el sector logístico este año.",
+    category: "Tendencias",
+    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+  },
+  {
+    id: 2,
+    title: "Cómo Optimizar la Última Milla en Entornos Urbanos",
+    excerpt: "Estrategias efectivas para mejorar la eficiencia en la entrega de última milla en ciudades congestionadas.",
+    category: "Operaciones",
+    image: "https://images.unsplash.com/photo-1519003722824-194d4455a60c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1175&q=80"
+  },
+  {
+    id: 3,
+    title: "Logística Verde: El Futuro del Transporte Sostenible",
+    excerpt: "Cómo implementar prácticas sostenibles en tu cadena de suministro sin sacrificar la eficiencia.",
+    category: "Sostenibilidad",
+    image: "https://images.unsplash.com/photo-1553413077-190dd305871c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80"
+  }
+];
+
+const TESTIMONIALS = [
+  {
+    id: 1,
+    content: "La capacitación de Shiski ha transformado por completo nuestras operaciones logísticas. El equipo ahora maneja los procesos con mayor eficiencia y precisión.",
+    name: "Carlos Méndez",
+    position: "Director de Operaciones - Logística Express",
+    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+    rating: 5
+  },
+  {
+    id: 2,
+    content: "Los cursos especializados nos permitieron reducir costos operativos en un 23% y mejorar nuestros tiempos de entrega. Totalmente recomendado.",
+    name: "María Gómez",
+    position: "Gerente de Logística - TransCargo",
+    avatar: "https://randomuser.me/api/portraits/women/44.jpg",
+    rating: 5
+  },
+  {
+    id: 3,
+    content: "La metodología práctica y los instructores con experiencia real en el sector hacen que estos cursos sean extremadamente valiosos para cualquier empresa de transporte.",
+    name: "Javier Torres",
+    position: "CEO - Distribuidora Nacional",
+    avatar: "https://randomuser.me/api/portraits/men/62.jpg",
+    rating: 5
+  }
+];
 
 export default function Main() {
-    return(
-    <section className="py-5">
-      <div className="container">
-        <h2 className="h3 mb-4">Cursos destacados</h2>
-        <div className="row g-4">
-          {MOCK.map(p => (
-            <div className="col-12 col-sm-6 col-lg-4" key={p.id}>
-              <div className="card h-100 shadow-sm">
-                <img src={p.img} className="card-img-top" alt={p.name} />
-                <div className="card-body d-flex flex-column">
-                  <h5 className="card-title">{p.name}</h5>
-                  <p className="card-text text-body-secondary mb-4">${p.price.toLocaleString('es-CL')}</p>
-                  <button className="btn btn-outline-primary mt-auto">Detalle del curso</button>
+  return(
+    <>
+      {/* Servicios */}
+      <section className="services-section">
+        <div className="container">
+          <h2 className="section-title">Áreas de Especialización</h2>
+          <div className="row g-4">
+            <div className="col-md-6 col-lg-3">
+              <div className="service-card">
+                <div className="service-icon">
+                  <FaTruck />
                 </div>
+                <h3 className="service-title">Flota de Autotransporte</h3>
+                <p className="service-description">Optimiza la gestión de tu flota con nuestros cursos especializados en transporte terrestre.</p>
               </div>
             </div>
-          ))}
+            <div className="col-md-6 col-lg-3">
+              <div className="service-card">
+                <div className="service-icon">
+                  <FaWarehouse />
+                </div>
+                <h3 className="service-title">Logística de Almacén</h3>
+                <p className="service-description">Mejora la eficiencia de tus almacenes con técnicas avanzadas de gestión y organización.</p>
+              </div>
+            </div>
+            <div className="col-md-6 col-lg-3">
+              <div className="service-card">
+                <div className="service-icon">
+                  <FaChartLine />
+                </div>
+                <h3 className="service-title">Análisis de Operaciones</h3>
+                <p className="service-description">Toma decisiones basadas en datos con nuestros cursos de análisis operativo y KPIs.</p>
+              </div>
+            </div>
+            <div className="col-md-6 col-lg-3">
+              <div className="service-card">
+                <div className="service-icon">
+                  <FaUserTie />
+                </div>
+                <h3 className="service-title">Gestión de Personal</h3>
+                <p className="service-description">Desarrolla las habilidades de liderazgo necesarias para gestionar equipos logísticos.</p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </section>
-    )
+      </section>
+
+      {/* Cursos */}
+      <section className="py-5 bg-light">
+        <div className="container">
+          <h2 className="section-title">Cursos destacados</h2>
+          <div className="row g-4">
+            {COURSES.map(course => (
+              <div className="col-md-6 col-lg-4" key={course.id}>
+                <div className="card h-100 shadow-sm blog-card">
+                  <div className="blog-image">
+                    <img src={course.img} alt={course.name} />
+                  </div>
+                  <div className="card-body d-flex flex-column">
+                    <h5 className="card-title">{course.name}</h5>
+                    <p className="card-text text-success fw-bold mb-4">${course.price.toLocaleString('es-CL')}</p>
+                    <Link to={`/courses/${course.id}`} className="btn btn-view-details mt-auto">Ver detalles</Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-4">
+            <Link to="/courses" className="btn btn-add-cart">Ver todos los cursos</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Blog */}
+      <section className="blog-section">
+        <div className="container">
+          <h2 className="section-title">Blog</h2>
+          <div className="row g-4">
+            {BLOG_POSTS.map(post => (
+              <div className="col-md-6 col-lg-4" key={post.id}>
+                <div className="blog-card">
+                  <div className="blog-image">
+                    <img src={post.image} alt={post.title} />
+                  </div>
+                  <div className="blog-content">
+                    <span className="blog-category">{post.category}</span>
+                    <h3 className="blog-title">{post.title}</h3>
+                    <p className="blog-excerpt">{post.excerpt}</p>
+                    <Link to="/blog" className="blog-link">
+                      Leer más <FaArrowRight />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-4">
+            <Link to="/blog" className="btn btn-outline-success">Ver todas las publicaciones</Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonios */}
+      <section className="testimonials-section">
+        <div className="container">
+          <h2 className="section-title">Testimonios</h2>
+          <div className="row g-4">
+            {TESTIMONIALS.map(testimonial => (
+              <div className="col-md-6 col-lg-4" key={testimonial.id}>
+                <div className="testimonial-card">
+                  <div className="testimonial-content">
+                    {testimonial.content}
+                  </div>
+                  <div className="testimonial-author">
+                    <div className="testimonial-avatar">
+                      <img src={testimonial.avatar} alt={testimonial.name} />
+                    </div>
+                    <div className="testimonial-info">
+                      <h4>{testimonial.name}</h4>
+                      <p>{testimonial.position}</p>
+                      <div className="testimonial-rating">
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <FaStar key={i} />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="cta-section">
+        <div className="container">
+          <h2 className="cta-title">Impulsa el éxito de tu Negocio con Programas de Formación Exclusivos</h2>
+          <p className="cta-description">
+            Accede a los contenidos de la mejor formación en logística y transporte diseñados específicamente para empresas como la tuya. Optimiza procesos, reduce costos y mejora la eficiencia operativa.
+          </p>
+          <Link to="/business" className="btn btn-cta-home">Solicitar información</Link>
+        </div>
+      </section>
+    </>
+  )
 }

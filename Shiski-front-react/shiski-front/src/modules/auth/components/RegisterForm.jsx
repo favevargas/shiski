@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import styles from './RegisterForm.module.css';
 
 export default function RegisterForm({ onSubmit, submitText = 'Registrarse' }) {
   const [form, setForm] = useState({ username: '', password: '', confirm: '' });
@@ -49,7 +50,7 @@ export default function RegisterForm({ onSubmit, submitText = 'Registrarse' }) {
         <label htmlFor="reg_confirm">Confirmar contraseña</label>
       </div>
 
-      <button type="submit" className="btn btn-primary w-100 py-2">{submitText}</button>
+      <button type="submit" className={`btn w-100 py-2 ${styles.customRegisterBtn}`}>{submitText}</button>
     </form>
   );
 }

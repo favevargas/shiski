@@ -13,7 +13,10 @@ export default function LoginPage() {
     const { ok, message } = login(username, password);
     if (ok) {
       setAlert({ show: true, msg: 'Bienvenido/a 👋', variant: 'success' });
-      setTimeout(() => navigate('/'), 1000);
+      setTimeout(() => {
+        navigate('/mi-perfil');
+        window.location.reload();
+      }, 1000);
     } else {
       setAlert({ show: true, msg: message || 'Usuario o contraseña inválidos.', variant: 'danger' });
     }

@@ -1,11 +1,13 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/hook/useAuth'; 
+import NavbarCart from './NavbarCart';
+import App from '../../../src/App';
+import "../../../src/index.css";
 
 export default function Navbar() {
 
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
-  const cartItems = JSON.parse(localStorage.getItem('cart')) || [];
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -32,15 +34,21 @@ export default function Navbar() {
               <NavLink className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')} to="/courses">Cursos</NavLink>
             </li>
             <li className="nav-item">
-              <Link to="/cart" className="nav-link position-relative">
-                <i className={`bi ${cartItems.length > 0 ? 'bi-cart-fill' : 'bi-cart'}`}></i>
-                {cartItems.length > 0 && (
-                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                    {cartItems.length}
-                    <span className="visually-hidden">items en el carrito</span>
-                  </span>
-                )}
-              </Link>
+              <NavLink className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')} to="/about-us">Nosotros</NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')} to="/business">Para Empresas</NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')} to="/blog">Blog</NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')} to="/contact">Contacto</NavLink>
+            </li>
+            <li className="nav-item">
+              <div className="nav-link">
+                <NavbarCart />
+              </div>
             </li>
 
             {!isAuthenticated ? (
@@ -54,17 +62,24 @@ export default function Navbar() {
               </>
             ) : (
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle d-flex align-items-center"
-                   href="/"
-                   id="userMenu"
-                   role="button"
-                   data-bs-toggle="dropdown"
-                   aria-expanded="false">
+                <a
+                  className="nav-link dropdown-toggle d-flex align-items-center"
+                  href="/"
+                  id="userMenu"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
                   <span className="me-2">Hola, {user?.username}</span>
                 </a>
                 <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
                   <li><span className="dropdown-item-text text-muted">Mi cuenta</span></li>
                   <li><hr className="dropdown-divider" /></li>
+                  <li>
+                    <button className="dropdown-item" onClick={() => navigate('/mi-perfil')}>
+                      Información
+                    </button>
+                  </li>
                   <li>
                     <button className="dropdown-item" onClick={handleLogout}>
                       Cerrar sesión
