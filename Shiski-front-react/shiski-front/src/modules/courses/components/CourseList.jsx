@@ -1,42 +1,67 @@
 import { courses } from '../utils/dummyData';
+import { useCart } from '../../cart/context/CartContext';
+import { Link } from 'react-router-dom';
+import { FaShoppingCart, FaEye } from 'react-icons/fa';
 
 export default function CourseList() {
-  const addToCart = (course) => {
-    // Obtenemos los ítems del carrito del localStorage
-    const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
-    
-    // Verificamos si el curso ya está en el carrito para evitar duplicados
-    const isCourseInCart = storedCart.some(item => item.id === course.id);
-    
-    if (!isCourseInCart) {
-      const updatedCart = [...storedCart, course];
-      localStorage.setItem('cart', JSON.stringify(updatedCart));
-      alert(`${course.name} ha sido agregado al carrito!`);
-    } else {
-      alert(`${course.name} ya está en el carrito.`);
-    }
+  const { addToCart } = useCart();
+  
+  const handleAddToCart = (course) => {
+    const result = addToCart(course);
+    alert(result.message);
   };
 
   return (
-    <div className="container py-5">
-      <h2 className="h3 mb-4">Cursos destacados</h2>
+    <div>
       <div className="row g-4">
-        {courses.map(p => (
-          <div className="col-12 col-sm-6 col-lg-4" key={p.id}>
-            <div className="card h-100 shadow-sm">
-              <img src={p.img} className="card-img-top" alt={p.name} />
-              <div className="card-body d-flex flex-column">
-                <h5 className="card-title">{p.name}</h5>
-                <p className="card-text text-body-secondary mb-4">${p.price.toLocaleString('es-CL')}</p>
+        {courses.map(course => (
+          <div className="col-md-6 col-lg-4" key={course.id}>
+            <div className="course-card">
+              <div className="course-image">
+                <img src={course.img} alt={course.name} />
+              </div>
+              <div className="course-content">
+                <h5 className="course-title">{course.name}</h5>
+                <p className="course-price">${course.price.toLocaleString('es-CL')}</p>
+                <p className="course-description">
+                  {course.description.length > 100 
+                    ? `${course.description.substring(0, 100)}...` 
+                    : course.description}
+                </p>
+              </div>
+              <div className="course-footer">
+                <Link to={`/courses/${course.id}`} className="btn btn-view-details">
+                  <FaEye className="me-2" /> Ver detalles
+                </Link>
                 <button 
-                  className="btn btn-outline-primary mt-auto"
-                  onClick={() => addToCart(p)}>
-                  Agregar al carrito
+                  className="btn btn-add-cart"
+                  onClick={() => handleAddToCart(course)}>
+                  <FaShoppingCart className="me-2" /> Agregar al carrito
                 </button>
               </div>
             </div>
           </div>
         ))}
+      </div>
+      
+      <div className="pagination-container">
+        <ul className="pagination">
+          <li className="pagination-item">
+            <a href="#" className="pagination-link">1</a>
+          </li>
+          <li className="pagination-item">
+            <a href="#" className="pagination-link">2</a>
+          </li>
+          <li className="pagination-item">
+            <a href="#" className="pagination-link active">3</a>
+          </li>
+          <li className="pagination-item">
+            <a href="#" className="pagination-link">4</a>
+          </li>
+          <li className="pagination-item">
+            <a href="#" className="pagination-link">5</a>
+          </li>
+        </ul>
       </div>
     </div>
   );

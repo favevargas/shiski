@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import styles from './LoginForm.module.css';
 
 export default function LoginForm({ onSubmit, submitText = 'Entrar' }) {
   const [form, setForm] = useState({ username: '', password: '' });
@@ -36,7 +37,7 @@ export default function LoginForm({ onSubmit, submitText = 'Entrar' }) {
         <label htmlFor="login_password">Contraseña</label>
       </div>
 
-      <button type="submit" className="btn btn-primary w-100 py-2">{submitText}</button>
+  <button type="submit" className={`btn w-100 py-2 ${styles.customLoginBtn}`}>{submitText}</button>
     </form>
   );
 }

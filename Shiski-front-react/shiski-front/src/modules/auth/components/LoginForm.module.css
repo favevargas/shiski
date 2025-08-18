@@ -1,0 +1,13 @@
+/* Estilos personalizados para el botón de login */
+.customLoginBtn {
+  background-color: #255625;
+  color: #fff;
+  border: none;
+  transition: background 0.2s;
+}
+
+.customLoginBtn:hover,
+.customLoginBtn:focus {
+  background-color: #214A21;
+  color: #fff;
+}

@@ -2,7 +2,7 @@ import { useState } from "react";
 import AlertBox from '../../layouts/AlertBox';
 import { useAuth } from "../hook/useAuth";
 import { useNavigate, Link } from "react-router-dom";
-
+import styles from "../components/RegisterForm.module.css"
 export default function RegisterPage() {
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -88,7 +88,7 @@ export default function RegisterPage() {
                     <label htmlFor="reg_confirm">Confirmar contraseña</label>
                   </div>
 
-                  <button type="submit" className="btn btn-primary w-100 py-2">Registrarse</button>
+                  <button type="submit" className={`btn w-100 py-2 ${styles.customRegisterBtn}`}> Registrarse </button>
                 </form>
 
                 <p className="mt-3 mb-0 text-center text-body-secondary">
