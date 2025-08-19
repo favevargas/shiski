@@ -1,8 +1,8 @@
-#configuración del perfil
+#configuraciï¿½n del perfil
 
 spring:
   application:
     name: tiendita
   profiles:
-    active: local #Cambia a 'developer', 'production' según corresponda
+    active: prod #Cambia a 'developer', 'production' segï¿½n corresponda
 
