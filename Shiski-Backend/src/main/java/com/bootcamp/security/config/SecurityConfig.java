@@ -44,7 +44,7 @@ public class SecurityConfig {
                 var corsConfig = new CorsConfiguration();
                 corsConfig.setAllowedOrigins(List.of(
                         "https://shiski.onrender.com",
-                        "https://shiski.onrender.com",
+                        "https://shiski.vercel.app",
                         "http://localhost:5173"
                 )); // React Dev
                 corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
