@@ -42,7 +42,10 @@ public class SecurityConfig {
         } else {
             http.cors(cors -> cors.configurationSource(request -> {
                 var corsConfig = new CorsConfiguration();
-                corsConfig.setAllowedOrigins(List.of("http://localhost:5173")); // React Dev
+                corsConfig.setAllowedOrigins(List.of(
+                        "https://shiski-test.onrender.com",
+                        "http://localhost:5173"
+                )); // React Dev
                 corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                 corsConfig.setAllowedHeaders(List.of("*"));
                 corsConfig.setAllowCredentials(true);
