@@ -21,4 +21,4 @@ spring:
 app:
   security:
     cors:
-      dev: true  # Deshabilita CORS para Postman en desarrollo local
+      dev: false # Deshabilita CORS para Postman en desarrollo local

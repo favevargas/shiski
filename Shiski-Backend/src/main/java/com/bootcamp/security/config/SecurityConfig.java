@@ -44,6 +44,7 @@ public class SecurityConfig {
                 var corsConfig = new CorsConfiguration();
                 corsConfig.setAllowedOrigins(List.of(
                         "https://shiski.onrender.com",
+                        "https://shiski.onrender.com",
                         "http://localhost:5173"
                 )); // React Dev
                 corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
@@ -64,7 +65,7 @@ public class SecurityConfig {
                                 "/openapi.yaml"
                         ).permitAll()
                         // Endpoints públicos
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/cursos/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/cursos/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api//v1/cursos/**").hasAuthority("ROLE_ADMIN")

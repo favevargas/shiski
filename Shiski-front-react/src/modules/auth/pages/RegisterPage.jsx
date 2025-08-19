@@ -7,10 +7,10 @@ export default function RegisterPage() {
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({ username: '', password: '', confirm: '' });
+  const [form, setForm] = useState({ nombre: '', email: '', password: '', confirm: '' });   
   const [alert, setAlert] = useState({ show: false, msg: '', variant: 'success' });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (form.password.length < 4) {
@@ -21,15 +21,23 @@ export default function RegisterPage() {
       setAlert({ show: true, msg: 'Las contraseñas no coinciden.', variant: 'danger' });
       return;
     }
+    
+    try{
 
-    const { ok, message } = register(form.username.trim(), form.password);
-    if (ok) {
+     // Enviar los datos correctos al backend
+    const userData = {
+        nombre: form.nombre.trim(),
+        email: form.email.trim(),
+        password: form.password
+      };
+
+    await register(userData);
       setAlert({ show: true, msg: 'Registro exitoso 🎉', variant: 'success' });
       setTimeout(() => navigate('/'), 1000);
-    } else {
-      setAlert({ show: true, msg: message || 'No se pudo registrar', variant: 'danger' });
+    } catch (error) {
+      setAlert({ show: true, msg: error.message || 'No se pudo registrar', variant: 'danger' });
     }
-  };
+  }; 
 
   return (
     <>
@@ -49,17 +57,32 @@ export default function RegisterPage() {
                 <h1 className="h4 mb-4 text-center">Crear cuenta</h1>
 
                 <form onSubmit={handleSubmit} noValidate className="needs-validation">
+                  {/* ✅ CAMBIO 4: Campo para nombre */}
                   <div className="form-floating mb-3">
                     <input
                       type="text"
                       className="form-control"
-                      id="reg_username"
-                      placeholder="Usuario"
+                      id="reg_nombre"
+                      placeholder="Nombre completo"
                       required
-                      value={form.username}
-                      onChange={(e) => setForm(f => ({ ...f, username: e.target.value }))}
+                      value={form.nombre}
+                      onChange={(e) => setForm(f => ({ ...f, nombre: e.target.value }))}
                     />
-                    <label htmlFor="reg_username">Usuario</label>
+                    <label htmlFor="reg_nombre">Nombre completo</label>
+                  </div>
+
+                  {/* ✅ CAMBIO 5: Campo para email */}
+                  <div className="form-floating mb-3">
+                    <input
+                      type="email"
+                      className="form-control"
+                      id="reg_email"
+                      placeholder="Correo electrónico"
+                      required
+                      value={form.email}
+                      onChange={(e) => setForm(f => ({ ...f, email: e.target.value }))}
+                    />
+                    <label htmlFor="reg_email">Correo electrónico</label>
                   </div>
 
                   <div className="form-floating mb-3">

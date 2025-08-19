@@ -12,6 +12,7 @@ import BusinessPage from './modules/business/pages/BusinessPage';
 import BlogPage from './modules/blog/pages/BlogPage';
 import ContactPage from './modules/contact/pages/ContactPage';
 import { CartProvider } from './modules/cart/context/CartContext';
+import { AuthProvider } from './modules/auth/hook/useAuth.jsx';
 
 
 function App() {
@@ -19,22 +20,24 @@ function App() {
   return (
    <CartProvider>
      <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/courses" element={<CoursePage />} />
-          <Route path="/courses/:id" element={<CourseDetailPage />} />
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/about-us" element={<AboutUsPage />} />
-          <Route path="/business" element={<BusinessPage />} />
-          <Route path="/blog" element={<BlogPage />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/mi-perfil" element={<MiPerfil />} />
-          <Route path="*" element={<Navigate to="/" />} />
-        </Route>
-      </Routes>
+      <AuthProvider>
+          <Routes>
+            <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/courses" element={<CoursePage />} />
+            <Route path="/courses/:id" element={<CourseDetailPage />} />
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/about-us" element={<AboutUsPage />} />
+            <Route path="/business" element={<BusinessPage />} />
+            <Route path="/blog" element={<BlogPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/mi-perfil" element={<MiPerfil />} />
+            <Route path="*" element={<Navigate to="/" />} />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
    </CartProvider>
     

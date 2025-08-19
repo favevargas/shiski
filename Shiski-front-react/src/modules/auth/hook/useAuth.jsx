@@ -1,54 +1,68 @@
-import { useEffect, useState } from 'react';
-import { users as seedUsers } from '../utils/dummyData.js';
+import { createContext, useContext, useState, useEffect } from 'react';
+import authService from '../../api/services/authService';
 
-const USERS_KEY = 'auth_users';
-const AUTH_KEY = 'auth_user';
+const AuthContext = createContext();
 
-function readUsers() {
-  const raw = localStorage.getItem(USERS_KEY);
-  if (raw) return JSON.parse(raw);
-  localStorage.setItem(USERS_KEY, JSON.stringify(seedUsers));
-  return seedUsers;
-}
-
-export function useAuth() {
-  const [user, setUser] = useState(() => {
-    const raw = sessionStorage.getItem(AUTH_KEY);
-    return raw ? JSON.parse(raw) : null;
-  });
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    readUsers(); // asegura semilla
+    // Verificar si hay un usuario autenticado al cargar la aplicación
+    const currentUser = authService.getCurrentUser();
+    if (currentUser) {
+      setUser(currentUser);
+    }
+    setLoading(false);
   }, []);
 
-  const login = (username, password) => {
-    const db = readUsers();
-    const found = db.find(u => u.username === username && u.password === password);
-    if (found) {
-      sessionStorage.setItem(AUTH_KEY, JSON.stringify(found));
-      setUser(found);
-      return { ok: true, user: found };
+  const login = async (credentials) => {
+    try {
+      const data = await authService.login(credentials);
+      setUser(data.user);
+      return data;
+    } catch (error) {
+      throw error;
     }
-    return { ok: false, message: 'Usuario o contraseña inválidos.' };
   };
 
-  const register = (username, password) => {
-    const db = readUsers();
-    const exists = db.some(u => u.username.toLowerCase() === username.toLowerCase());
-    if (exists) return { ok: false, message: 'El usuario ya existe.' };
-
-    const newUser = { id: Date.now(), username, password };
-    const updated = [...db, newUser];
-    localStorage.setItem(USERS_KEY, JSON.stringify(updated));
-    sessionStorage.setItem(AUTH_KEY, JSON.stringify(newUser));
-    setUser(newUser);
-    return { ok: true, user: newUser };
+  const register = async (userData) => {
+    try {
+      const data = await authService.register(userData);
+      return { ok: true, data };
+    } catch (error) {
+      return { ok: false, message: error.response?.data?.message || 'Error en el registro' };
+    }
   };
 
   const logout = () => {
-    sessionStorage.removeItem(AUTH_KEY);
+    authService.logout();
     setUser(null);
   };
 
-  return { user, isAuthenticated: !!user, login, register, logout };
-}
+  const isAdmin = () => {
+    return authService.hasRole('ROLE_ADMIN');
+  };
+
+  const value = {
+    user,
+    loading,
+    login,
+    register,
+    logout,
+    isAuthenticated: !!user,
+    isAdmin
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth debe ser usado dentro de un AuthProvider');
+  }
+  return context;
+};
+
+export default useAuth;
