@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TienditaApplication {
+public class ShiskiApplication {
 
 	public static void main(String[] args) {
 		// Carga variables de entorno desde .env
@@ -15,6 +15,6 @@ public class TienditaApplication {
 		System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME", ""));
 		System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD", ""));
 
-		SpringApplication.run(TienditaApplication.class, args);
+		SpringApplication.run(ShiskiApplication.class, args);
 	}
 }

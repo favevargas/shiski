@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.bootcamp</groupId>
-	<artifactId>tiendita</artifactId>
+	<artifactId>shiski</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>tiendita</name>
-	<description>tiendita</description>
+	<name>shiski</name>
+	<description>shiski</description>
 	<url/>
 	<licenses>
 		<license/>

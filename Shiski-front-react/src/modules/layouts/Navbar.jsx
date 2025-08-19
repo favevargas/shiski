@@ -1,7 +1,6 @@
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/hook/useAuth'; 
 import NavbarCart from './NavbarCart';
-import App from '../../../src/App';
 import "../../../src/index.css";
 
 export default function Navbar() {
