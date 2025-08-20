@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Determina la URL base según el entorno
 const BASE_URL = process.env.NODE_ENV === 'production' 
-  ? 'https://shiski-backend.onrender.com' 
+  ? 'https://shiski.onrender.com' 
   : 'http://localhost:8080';
 
 const axiosInstance = axios.create({

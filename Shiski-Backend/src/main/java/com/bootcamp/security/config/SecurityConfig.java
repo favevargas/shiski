@@ -73,8 +73,8 @@ public class SecurityConfig {
 
 
                         // Endpoints protegidos
-                        .requestMatchers("/api/usuarios/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/v1/usuarios/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN")
 
                         // Resto requiere autenticación
                         .anyRequest().authenticated()
