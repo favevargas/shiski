@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 @RequiredArgsConstructor
 @RestController
@@ -16,16 +17,14 @@ public class AuthController {
 
     private final AuthService authService;
 
-    //Solo el endpoint específico
-    @PostMapping("/register")  // Resultado: /api/v1/auth/register
-    public ResponseEntity<Void> register(@RequestBody RegisterRequest request) {
+    @PostMapping("/register")
+    public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequest request) {
         authService.registrar(request.nombre(), request.email(), request.password());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    // Solo el endpoint específico
-    @PostMapping("/login")     // Resultado: /api/v1/auth/login
-    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         LoginResponse response = authService.login(request.email(), request.password());
         return ResponseEntity.ok(response);
     }
