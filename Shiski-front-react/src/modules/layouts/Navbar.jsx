@@ -69,7 +69,7 @@ export default function Navbar() {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <span className="me-2">Hola, {user?.username}</span>
+                  <span className="me-2">Hola, {user?.nombre}</span>
                 </a>
                 <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
                   <li><span className="dropdown-item-text text-muted">Mi cuenta</span></li>
