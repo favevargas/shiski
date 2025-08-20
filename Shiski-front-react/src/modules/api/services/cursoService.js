@@ -1,6 +1,7 @@
 import axiosInstance from '../config/axiosConfig';
 
-const CURSOS_URL = '/cursos';
+// Cambiar la URL para coincidir con el backend
+const CURSOS_URL = '/api/v1/cursos';
 
 const cursoService = {
   getAllCursos: async () => {

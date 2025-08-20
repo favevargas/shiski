@@ -22,7 +22,7 @@ export default function CoursePage() {
             setLoading(false);
         }
     };
-    
+
     useEffect(() => {
         fetchCursos();
     }, []);
@@ -87,7 +87,8 @@ export default function CoursePage() {
                             </div>
                             
                             <div className="col-lg-9">
-                                <CourseList courses={cursos} />
+                                {/* Pasar cursos como props a CourseList */}
+                                <CourseList cursos={cursos} />
                             </div>
                         </div>
                     </>

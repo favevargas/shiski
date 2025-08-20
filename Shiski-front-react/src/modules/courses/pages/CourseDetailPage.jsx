@@ -1,24 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaArrowLeft, FaShoppingCart, FaStar, FaStarHalfAlt, FaRegStar, FaCheck } from 'react-icons/fa';
-import { courses } from '../utils/dummyData';
+import cursoService from '../../api/services/cursoService';
 import '../styles/CourseDetail.css';
 
 export default function CourseDetailPage() {
   const { id } = useParams();
   const [activeTab, setActiveTab] = useState('descripcion');
+  const [curso, setCurso] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   
-  // Encontrar el curso por ID
-  const course = courses.find(course => course.id === parseInt(id)) || {
-    id: 0,
-    name: 'Curso no encontrado',
-    price: 0,
-    img: '',
-    description: 'Lo sentimos, el curso que buscas no existe.',
-    content: [],
-    requirements: [],
-    testimonials: []
-  };
+  useEffect(() => {
+    const fetchCurso = async () => {
+      try {
+        setLoading(true);
+        const data = await cursoService.getCursoById(id);
+        setCurso(data);
+      } catch (err) {
+        setError(err);
+        // Fallback para curso no encontrado
+        setCurso({
+          id: 0,
+          titulo: 'Curso no encontrado',
+          precio: 0,
+          imagenMiniatura: '',
+          descripcion: 'Lo sentimos, el curso que buscas no existe.',
+          objetivos: [],
+          requisitos: [],
+          testimonios: []
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCurso();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="text-center my-5">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!curso) return null;
 
   return (
     <div className="course-detail-container">
@@ -28,8 +58,8 @@ export default function CourseDetailPage() {
         </Link>
         
         <div className="course-header">
-          <h1>{course.name}</h1>
-          <div className="course-price">${course.price.toLocaleString('es-CL')}</div>
+          <h1>{curso.titulo}</h1>
+          <div className="course-price">${curso.precio?.toLocaleString('es-CL')}</div>
           <div className="course-actions">
             <button className="enroll-button me-3">
               <FaShoppingCart className="me-2" /> Agregar al carrito
