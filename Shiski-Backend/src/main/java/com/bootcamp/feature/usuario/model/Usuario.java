@@ -16,7 +16,7 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "usuario_id")  // ✅ Mapear a la columna correcta
+    @Column(name = "usuario_id")
     private Long id;
 
     private String nombre;
@@ -29,14 +29,20 @@ public class Usuario {
     private LocalDateTime fechaRegistro;
     
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_usuario")  // ✅ Mapear a la columna correcta
+    @Column(name = "tipo_usuario")
     private TipoUsuario tipoUsuario;
 
-    private boolean activo;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RolUsuario rol = RolUsuario.ROLE_USER;
+
+    private boolean activo = true;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Inscripcion> inscripciones;
     
-    // Campo adicional para roles de Spring Security (si es necesario)
-    private String rol;
+    @PrePersist
+    protected void onCreate() {
+        fechaRegistro = LocalDateTime.now();
+    }
 }
