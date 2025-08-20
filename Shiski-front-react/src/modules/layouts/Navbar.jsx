@@ -61,26 +61,40 @@ export default function Navbar() {
               </>
             ) : (
               <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle d-flex align-items-center"
-                  href="/"
+                <button
+                  className="nav-link dropdown-toggle d-flex align-items-center btn btn-link text-white border-0 bg-transparent"
                   id="userMenu"
-                  role="button"
+                  type="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
+                  aria-haspopup="true"
+                  aria-label={`Menú de usuario para ${user?.nombre}`}
+                  style={{ textDecoration: 'none' }}
                 >
                   <span className="me-2">Hola, {user?.nombre}</span>
-                </a>
-                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-                  <li><span className="dropdown-item-text text-muted">Mi cuenta</span></li>
-                  <li><hr className="dropdown-divider" /></li>
-                  <li>
-                    <button className="dropdown-item" onClick={() => navigate('/mi-perfil')}>
+                </button>
+                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu" role="menu">
+                  <li role="none"><span className="dropdown-item-text text-muted" role="menuitem">Mi cuenta</span></li>
+                  <li role="none"><hr className="dropdown-divider" /></li>
+                  <li role="none">
+                    <button 
+                      className="dropdown-item" 
+                      onClick={() => navigate('/mi-perfil')}
+                      role="menuitem"
+                      tabIndex="0"
+                    >
+                      <i className="bi bi-person me-2" aria-hidden="true"></i>
                       Información
                     </button>
                   </li>
-                  <li>
-                    <button className="dropdown-item" onClick={handleLogout}>
+                  <li role="none">
+                    <button 
+                      className="dropdown-item text-danger" 
+                      onClick={handleLogout}
+                      role="menuitem"
+                      tabIndex="0"
+                    >
+                      <i className="bi bi-box-arrow-right me-2" aria-hidden="true"></i>
                       Cerrar sesión
                     </button>
                   </li>

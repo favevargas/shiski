@@ -9,6 +9,7 @@ export default function RegisterPage() {
 
   const [form, setForm] = useState({ nombre: '', email: '', password: '', confirm: '' });   
   const [alert, setAlert] = useState({ show: false, msg: '', variant: 'success' });
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,20 +23,21 @@ export default function RegisterPage() {
       return;
     }
     
+    setLoading(true);
     try{
-
-     // Enviar los datos correctos al backend
-    const userData = {
+      const userData = {
         nombre: form.nombre.trim(),
         email: form.email.trim(),
         password: form.password
       };
 
-    await register(userData);
+      await register(userData);
       setAlert({ show: true, msg: 'Registro exitoso 🎉', variant: 'success' });
       setTimeout(() => navigate('/'), 1000);
     } catch (error) {
       setAlert({ show: true, msg: error.message || 'No se pudo registrar', variant: 'danger' });
+    } finally {
+      setLoading(false);
     }
   }; 
 
@@ -111,7 +113,13 @@ export default function RegisterPage() {
                     <label htmlFor="reg_confirm">Confirmar contraseña</label>
                   </div>
 
-                  <button type="submit" className={`btn w-100 py-2 ${styles.customRegisterBtn}`}> Registrarse </button>
+                  <button 
+                    type="submit" 
+                    className={`btn w-100 py-2 ${styles.customRegisterBtn}`}
+                    disabled={loading}
+                  >
+                    {loading ? 'Registrando...' : 'Registrarse'}
+                  </button>
                 </form>
 
                 <p className="mt-3 mb-0 text-center text-body-secondary">
