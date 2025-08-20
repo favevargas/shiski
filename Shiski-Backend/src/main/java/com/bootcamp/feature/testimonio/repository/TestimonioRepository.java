@@ -11,9 +11,17 @@ import java.util.List;
 @Repository
 public interface TestimonioRepository extends JpaRepository<Testimonio, Long> {
     
+    // PROBLEMÁTICO - No carga relaciones
     List<Testimonio> findByCursoIdOrderByFechaCreacionDesc(Long cursoId);
-    
     List<Testimonio> findByUsuarioIdOrderByFechaCreacionDesc(Long usuarioId);
+    
+    // NECESARIO - Agregar JOIN FETCH
+    @Query("SELECT t FROM Testimonio t " +
+           "JOIN FETCH t.usuario u " +
+           "JOIN FETCH t.curso c " +
+           "WHERE t.curso.id = :cursoId " +
+           "ORDER BY t.fechaCreacion DESC")
+    List<Testimonio> findByCursoIdWithUsuarioAndCursoOrderByFechaCreacionDesc(@Param("cursoId") Long cursoId);
     
     @Query("SELECT AVG(t.calificacion) FROM Testimonio t WHERE t.curso.id = :cursoId")
     Double findAverageCalificacionByCursoId(@Param("cursoId") Long cursoId);
