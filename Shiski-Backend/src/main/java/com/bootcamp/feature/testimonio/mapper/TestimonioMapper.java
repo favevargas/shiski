@@ -19,13 +19,14 @@ public class TestimonioMapper {
 
     public static TestimonioResponse toResponse(Testimonio testimonio) {
         return new TestimonioResponse(
-            .id(testimonio.getId())
-            .comentario(testimonio.getComentario())
-            .calificacion(testimonio.getCalificacion())
-            .fechaCreacion(testimonio.getFechaCreacion())
-            
-            .usuarioId(testimonio.getUsuario() != null ? testimonio.getUsuario().getId() : null)
-            .nombreUsuario(testimonio.getUsuario() != null ? testimonio.getUsuario().getNombre() : "Usuario desconocido")
-            .build();
-        }
+            testimonio.getId(),
+            testimonio.getComentario(),
+            testimonio.getCalificacion(),
+            testimonio.getFechaCreacion(),
+            testimonio.getCurso() != null ? testimonio.getCurso().getId() : null,
+            testimonio.getCurso() != null ? testimonio.getCurso().getTitulo() : "Curso desconocido",
+            testimonio.getUsuario() != null ? testimonio.getUsuario().getId() : null,
+            testimonio.getUsuario() != null ? testimonio.getUsuario().getNombre() : "Usuario desconocido"
+        );
     }
+}
