@@ -46,8 +46,7 @@ public class AuthService {
         nuevoUsuario.setEmail(email);
         nuevoUsuario.setPassword(encodedPassword);
         nuevoUsuario.setActivo(true);
-        nuevoUsuario.setTipoUsuario(TipoUsuario.ESTUDIANTE);
-        nuevoUsuario.setRol(RolUsuario.ROLE_USER);
+        nuevoUsuario.setRol(RolUsuario.ROLE_USER); // Eliminar setTipoUsuario
         usuarioRepository.save(nuevoUsuario);
     }
 

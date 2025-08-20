@@ -16,21 +16,14 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "usuario_id")
-    private Long id;
+    private Long id; // Cambio de @Column(name = "usuario_id") a id directo
 
     private String nombre;
-    private String apellido;
     private String email;
     private String password;
-    private String telefono;
     
     @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;
-    
-    @Enumerated(EnumType.STRING)
-    @Column(name = "tipo_usuario")
-    private TipoUsuario tipoUsuario;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
