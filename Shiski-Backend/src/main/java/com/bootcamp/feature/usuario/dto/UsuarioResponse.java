@@ -1,15 +1,13 @@
 package com.bootcamp.feature.usuario.dto;
 
-import lombok.Builder;
+import com.bootcamp.feature.usuario.model.RolUsuario;
+import java.time.LocalDateTime;
 
-@Builder
 public record UsuarioResponse(
-        Long id,
-        String nombre,
-        String apellido,
-        String email,
-        String telefono,
-        String rol,
-        String tipoUsuario,
-        boolean activo
+    Long id,
+    String nombre,
+    String email,
+    RolUsuario rol,
+    LocalDateTime fechaRegistro,
+    Boolean activo // Cambio de boolean a Boolean
 ) {}

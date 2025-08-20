@@ -14,7 +14,7 @@ public class UsuarioMapper {
             usuario.getEmail(),
             usuario.getRol(),
             usuario.getFechaRegistro(),
-            usuario.isActivo()
+            usuario.isActivo() // Cambio de getActivo() a isActivo()
         );
     }
 
