@@ -16,12 +16,12 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Cambio de @Column(name = "usuario_id") a id directo
+    private Long id;
 
     private String nombre;
     private String email;
     private String password;
-    
+
     @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;
 
@@ -33,7 +33,7 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Inscripcion> inscripciones;
-    
+
     @PrePersist
     protected void onCreate() {
         fechaRegistro = LocalDateTime.now();

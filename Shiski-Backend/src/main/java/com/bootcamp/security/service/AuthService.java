@@ -1,7 +1,6 @@
 package com.bootcamp.security.service;
 
 import com.bootcamp.feature.usuario.model.Usuario;
-import com.bootcamp.feature.usuario.model.TipoUsuario;
 import com.bootcamp.feature.usuario.model.RolUsuario;
 import com.bootcamp.feature.usuario.repository.UsuarioRepository;
 import com.bootcamp.security.dto.LoginResponse;
@@ -28,9 +27,9 @@ public class AuthService {
         if (usuarioSecurityRepo.existsByEmail(email)) {
             throw new RuntimeException("El email ya está registrado");
         }
-    
+
         String encodedPassword = encoder.encode(password);
-        
+
         // Crear UsuarioSecurity (para autenticación)
         UsuarioSecurity nuevoUsuarioSecurity = new UsuarioSecurity();
         nuevoUsuarioSecurity.setNombre(nombre);
@@ -39,14 +38,14 @@ public class AuthService {
         nuevoUsuarioSecurity.setRol(RolUsuario.ROLE_USER);
         nuevoUsuarioSecurity.setActivo(true);
         usuarioSecurityRepo.save(nuevoUsuarioSecurity);
-    
+
         // Crear Usuario (para datos completos)
         Usuario nuevoUsuario = new Usuario();
         nuevoUsuario.setNombre(nombre);
         nuevoUsuario.setEmail(email);
         nuevoUsuario.setPassword(encodedPassword);
         nuevoUsuario.setActivo(true);
-        nuevoUsuario.setRol(RolUsuario.ROLE_USER); // Eliminar setTipoUsuario
+        nuevoUsuario.setRol(RolUsuario.ROLE_USER);
         usuarioRepository.save(nuevoUsuario);
     }
 
@@ -59,12 +58,12 @@ public class AuthService {
         }
 
         String token = jwtUtils.generateToken(email);
-        
+
         return new LoginResponse(
-            usuarioSecurity.getNombre(), 
-            usuarioSecurity.getEmail(), 
-            token, 
-            usuarioSecurity.getRol().name()
+                usuarioSecurity.getNombre(),
+                usuarioSecurity.getEmail(),
+                token,
+                usuarioSecurity.getRol().name()
         );
     }
 }
