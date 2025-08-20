@@ -1,36 +1,58 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../hook/useAuth';
 
 export default function MiPerfil() {
-  // Datos simulados de usuario
-  const [user, setUser] = useState({
-    nombre: 'Juan Pérez',
-    email: 'juan@email.com',
-    telefono: '987654321',
-  });
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [edit, setEdit] = useState(false);
-  const [form, setForm] = useState(user);
+  
+  const [form, setForm] = useState({
+    nombre: user?.nombre || '',
+    email: user?.email || '',
+    telefono: user?.telefono || '',
+  });
 
-  // Datos simulados de progreso y compras
-  const cursos = [
-    { nombre: 'Logística Básica', progreso: 80, fecha: '2025-07-10', certificado: true },
-    { nombre: 'Gestión de Inventarios', progreso: 40, fecha: '2025-08-01', certificado: false },
-  ];
-  const compras = [
-    { nombre: 'Plan Premium', tipo: 'Plan', fecha: '2025-06-15' },
-    { nombre: 'Curso: Logística Básica', tipo: 'Curso', fecha: '2025-07-10' },
-  ];
+  // ✅ AGREGADO: Datos simulados para cursos y compras
+  const [cursos] = useState([
+    { nombre: 'Introducción al Esquí', progreso: 85, certificado: false },
+    { nombre: 'Técnicas Avanzadas', progreso: 100, certificado: true },
+    { nombre: 'Esquí de Montaña', progreso: 45, certificado: false }
+  ]);
 
-  const handleEdit = () => setEdit(true);
-  const handleCancel = () => { setEdit(false); setForm(user); };
-  const handleSave = () => { setUser(form); setEdit(false); };
+  const [compras] = useState([
+    { nombre: 'Curso Básico de Esquí', tipo: 'Curso', fecha: '2024-01-15' },
+    { nombre: 'Equipo Completo', tipo: 'Equipo', fecha: '2024-02-20' }
+  ]);
+
+  // ✅ AGREGADO: Funciones faltantes
+  const handleEdit = () => {
+    setEdit(true);
+  };
+
+  const handleSave = () => {
+    // console.log('Guardando datos:', form); // ✅ Remover esta línea
+    setForm({
+      nombre: user?.nombre || '',
+      email: user?.email || '',
+      telefono: user?.telefono || '',
+    });
+    setEdit(false);
+  };
+
+  const handleCancel = () => {
+    setForm({
+      nombre: user?.nombre || '',
+      email: user?.email || '',
+      telefono: user?.telefono || '',
+    });
+    setEdit(false);
+  };
 
   const handleLogout = () => {
     if (window.confirm('¿Estás seguro que deseas cerrar sesión?')) {
-      // Aquí puedes limpiar el estado de autenticación, tokens, etc.
-      // Por ejemplo, localStorage.removeItem('token');
-      sessionStorage.removeItem('auth_user');
-      window.location.href = '/login';
-      window.location.reload();
+      logout();
+      navigate('/');
     }
   };
 
@@ -73,9 +95,9 @@ export default function MiPerfil() {
                 </>
               ) : (
                 <>
-                  <p><b>Nombre:</b> {user.nombre}</p>
-                  <p><b>Email:</b> {user.email}</p>
-                  <p><b>Teléfono:</b> {user.telefono}</p>
+                  <p><b>Nombre:</b> {user?.nombre}</p>
+                  <p><b>Email:</b> {user?.email}</p>
+                  <p><b>Teléfono:</b> {user?.telefono || 'No especificado'}</p>
                   <button className="btn btn-cta-home" onClick={handleEdit}>Editar</button>
                 </>
               )}

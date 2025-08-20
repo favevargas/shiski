@@ -2,7 +2,7 @@
 
 spring:
   application:
-    name: tiendita
+    name: shiski
   profiles:
     active: prod #Cambia a 'developer', 'production' seg�n corresponda
 

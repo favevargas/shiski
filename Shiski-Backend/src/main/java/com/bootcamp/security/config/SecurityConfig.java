@@ -44,6 +44,7 @@ public class SecurityConfig {
                 var corsConfig = new CorsConfiguration();
                 corsConfig.setAllowedOrigins(List.of(
                         "https://shiski.onrender.com",
+                        "https://shiski.vercel.app",
                         "http://localhost:5173"
                 )); // React Dev
                 corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
@@ -64,7 +65,7 @@ public class SecurityConfig {
                                 "/openapi.yaml"
                         ).permitAll()
                         // Endpoints públicos
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/cursos/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/cursos/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api//v1/cursos/**").hasAuthority("ROLE_ADMIN")
@@ -72,8 +73,8 @@ public class SecurityConfig {
 
 
                         // Endpoints protegidos
-                        .requestMatchers("/api/usuarios/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/api/admin/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/v1/usuarios/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers("/api/v1/admin/**").hasAuthority("ROLE_ADMIN")
 
                         // Resto requiere autenticación
                         .anyRequest().authenticated()

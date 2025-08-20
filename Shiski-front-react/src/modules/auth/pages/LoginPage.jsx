@@ -8,17 +8,24 @@ export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [alert, setAlert] = useState({ show: false, msg: '', variant: 'success' });
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = ({ username, password }) => {
-    const { ok, message } = login(username, password);
-    if (ok) {
+  const handleLogin = async ({ email, password }) => {
+    setLoading(true);
+    try {
+      const data = await login({ email, password });
       setAlert({ show: true, msg: 'Bienvenido/a 👋', variant: 'success' });
       setTimeout(() => {
         navigate('/mi-perfil');
-        window.location.reload();
       }, 1000);
-    } else {
-      setAlert({ show: true, msg: message || 'Usuario o contraseña inválidos.', variant: 'danger' });
+    } catch (error) {
+      setAlert({ 
+        show: true, 
+        msg: error.response?.data?.message || 'Email o contraseña inválidos.', 
+        variant: 'danger' 
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -38,7 +45,11 @@ export default function LoginPage() {
             <div className="card-body p-4 p-md-5">
               <h1 className="h4 mb-4 text-center">Iniciar Sesión</h1>
 
-              <LoginForm onSubmit={handleLogin} submitText="Entrar" />
+              <LoginForm 
+                onSubmit={handleLogin} 
+                submitText={loading ? 'Iniciando...' : 'Entrar'}
+                loading={loading} // ✅ Cambiar de 'disabled' a 'loading'
+              />
 
               <p className="mt-3 mb-0 text-center text-body-secondary">
                 ¿No tienes cuenta? <Link to="/register">Regístrate</Link>

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -18,19 +19,23 @@ public class Usuario {
     private Long id;
 
     private String nombre;
-    private String apellido;
     private String email;
     private String password;
-    private String telefono;
-    private String rol;
 
-    // Asumiendo que `tipo_usuario` es un ENUM en tu base de datos
+    @Column(name = "fecha_registro")
+    private LocalDateTime fechaRegistro;
+
     @Enumerated(EnumType.STRING)
-    private TipoUsuario tipoUsuario;
+    @Column(nullable = false)
+    private RolUsuario rol = RolUsuario.ROLE_USER;
 
-    private boolean activo;
-    private int usuarioId;
+    private boolean activo = true;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Inscripcion> inscripciones;
+
+    @PrePersist
+    protected void onCreate() {
+        fechaRegistro = LocalDateTime.now();
+    }
 }
