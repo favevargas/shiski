@@ -7,10 +7,16 @@ const authService = {
     try {
       const response = await axiosInstance.post(`${AUTH_URL}/login`, credentials);
       if (response.data.token) {
-        // Guarda el token y la información del usuario
+        // Actualizar para manejar la estructura de respuesta del backend
         const storage = credentials.rememberMe ? localStorage : sessionStorage;
         storage.setItem('token', response.data.token);
-        storage.setItem('user', JSON.stringify(response.data.user));
+        // El backend devuelve: {nombre, email, token, roles}
+        const userData = {
+          nombre: response.data.nombre,
+          email: response.data.email,
+          roles: response.data.roles
+        };
+        storage.setItem('user', JSON.stringify(userData));
       }
       return response.data;
     } catch (error) {

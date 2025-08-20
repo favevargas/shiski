@@ -9,16 +9,19 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [alert, setAlert] = useState({ show: false, msg: '', variant: 'success' });
 
-  const handleLogin = ({ username, password }) => {
-    const { ok, message } = login(username, password);
-    if (ok) {
+  const handleLogin = async ({ email, password }) => {
+    try {
+      const data = await login({ email, password });
       setAlert({ show: true, msg: 'Bienvenido/a 👋', variant: 'success' });
       setTimeout(() => {
         navigate('/mi-perfil');
-        window.location.reload();
       }, 1000);
-    } else {
-      setAlert({ show: true, msg: message || 'Usuario o contraseña inválidos.', variant: 'danger' });
+    } catch (error) {
+      setAlert({ 
+        show: true, 
+        msg: error.response?.data?.message || 'Email o contraseña inválidos.', 
+        variant: 'danger' 
+      });
     }
   };
 

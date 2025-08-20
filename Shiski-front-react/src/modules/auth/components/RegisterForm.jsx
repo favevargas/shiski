@@ -2,11 +2,20 @@ import { useState } from 'react';
 import styles from './RegisterForm.module.css';
 
 export default function RegisterForm({ onSubmit, submitText = 'Registrarse' }) {
-  const [form, setForm] = useState({ username: '', password: '', confirm: '' });
+  const [form, setForm] = useState({ nombre: '', email: '', password: '', confirm: '' });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit?.({ ...form, username: form.username.trim() });
+    if (form.password !== form.confirm) {
+      // Manejar error de confirmación
+      return;
+    }
+    // Enviar solo los campos que espera el backend
+    onSubmit?.({
+      nombre: form.nombre.trim(),
+      email: form.email.trim(),
+      password: form.password
+    });
   };
 
   return (

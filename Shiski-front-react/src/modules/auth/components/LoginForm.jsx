@@ -2,26 +2,26 @@ import { useState } from 'react';
 import styles from './LoginForm.module.css';
 
 export default function LoginForm({ onSubmit, submitText = 'Entrar' }) {
-  const [form, setForm] = useState({ username: '', password: '' });
+  const [form, setForm] = useState({ email: '', password: '' });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit?.({ username: form.username.trim(), password: form.password });
+    onSubmit?.({ email: form.email.trim(), password: form.password });
   };
 
   return (
     <form onSubmit={handleSubmit} noValidate className="needs-validation">
       <div className="form-floating mb-3">
         <input
-          type="text"
+          type="email"
           className="form-control"
-          id="login_username"
-          placeholder="Usuario"
+          id="login_email"
+          placeholder="Email"
           required
-          value={form.username}
-          onChange={(e) => setForm(f => ({ ...f, username: e.target.value }))}
+          value={form.email}
+          onChange={(e) => setForm(f => ({ ...f, email: e.target.value }))}
         />
-        <label htmlFor="login_username">Usuario</label>
+        <label htmlFor="login_email">Email</label>
       </div>
 
       <div className="form-floating mb-4">
