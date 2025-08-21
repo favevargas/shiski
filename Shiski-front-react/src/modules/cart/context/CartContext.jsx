@@ -46,9 +46,9 @@ export const CartProvider = ({ children }) => {
     
     if (!isCourseInCart) {
       setCartItems([...cartItems, course]);
-      return { success: true, message: `${course.name} ha sido agregado al carrito!` };
+      return { success: true, message: `${course.titulo || course.name || 'Curso'} ha sido agregado al carrito!` };
     } else {
-      return { success: false, message: `${course.name} ya está en el carrito.` };
+      return { success: false, message: `${course.titulo || course.name || 'Curso'} ya está en el carrito.` };
     }
   };
 
