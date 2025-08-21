@@ -81,7 +81,8 @@ export const CartProvider = ({ children }) => {
     removeFromCart,
     clearCart,
     total,
-    syncWithBackend // Nueva función
+    itemCount: cartItems.length, 
+    syncWithBackend
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

@@ -192,9 +192,14 @@ export default function CourseDetailPage() {
             {activeTab === 'requisitos' && (
               <div className="requirements-tab">
                 <ul className="requirements-list">
-                  {curso.requisitos ? (
+                  {curso.requisitos && Array.isArray(curso.requisitos) ? (
                     curso.requisitos.map((req, index) => (
                       <li key={index} className="requirement-item">{req}</li>
+                    ))
+                  ) : curso.requisitos && typeof curso.requisitos === 'string' ? (
+                    // Si requisitos es un string, dividirlo por líneas
+                    curso.requisitos.split('\n').filter(req => req.trim()).map((req, index) => (
+                      <li key={index} className="requirement-item">{req.trim()}</li>
                     ))
                   ) : (
                     <>

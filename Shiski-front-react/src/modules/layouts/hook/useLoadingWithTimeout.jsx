@@ -15,7 +15,7 @@ export default function useLoadingWithTimeout(timeoutMs = 60000) {
         // Simulación de progreso
         intervalRef.current = setInterval(() => {
             setProgress((prev) => {
-                if (prev >= 90) return prev; // Evita que el progreso supere el 90%
+                if (prev >= 90) return prev;
                 return prev + Math.random() * 10; // Incremento aleatorio entre 0 y 10
             });
         }, 2000);

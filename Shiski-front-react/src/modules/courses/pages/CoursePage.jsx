@@ -82,6 +82,24 @@ export default function CoursePage() {
             );
         }
 
+        //filtro por rango de precio
+        if (selectedPriceRange) {
+            filtered = filtered.filter(curso => {
+                const precio = parseFloat(curso.precio) || 0;
+                
+                switch (selectedPriceRange) {
+                    case '0-50000':
+                        return precio >= 0 && precio <= 50000;
+                    case '50000-100000':
+                        return precio > 50000 && precio <= 100000;
+                    case '100000+':
+                        return precio > 100000;
+                    default:
+                        return true;
+                }
+            });
+        }
+
         setFilteredCursos(filtered);
         setCurrentPage(1); // Reiniciar a la primera página al aplicar filtros
     };
@@ -131,7 +149,7 @@ export default function CoursePage() {
                         
                         {/* Filtros */}
                         <div className="row">
-                            <div className="col-lg-3">  {/* ✅ Sidebar para filtros */}
+                            <div className="col-lg-3">
                                 <div className="filters-container">
                                     <h4 className="filter-title">Filtros</h4>
                                     
