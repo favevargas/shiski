@@ -3,5 +3,5 @@ spring:
   application:
     name: shiski
   profiles:
-    active: prod #Cambia a 'developer', 'production' seg�n corresponda
+    active: prod #Cambia a 'developer', 'production' según corresponda
 

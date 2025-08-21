@@ -18,12 +18,12 @@ export default function CoursePage() {
 
     //Estados para filtros
     const [searchTerm, setSearchTerm] = useState('');
-    const [category, setCategory] = useState('');  
+    const [selectedCategory, setSelectedCategory] = useState('');  // ✅ AGREGADO
     const [selectedPriceRange, setSelectedPriceRange] = useState('');
 
     //Estados para paginación
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [itemsPerPage] = useState(10); // ✅ CORREGIDO: era itemsPerPage, no cursosPerPage
 
     
     const fetchCursos = async () => {
@@ -75,7 +75,7 @@ export default function CoursePage() {
             );
         }
 
-    //filtro por categoría
+        //filtro por categoría
         if (selectedCategory) {
             filtered = filtered.filter(curso => 
                 curso.categoria?.toLowerCase() === selectedCategory.toLowerCase()
@@ -86,11 +86,11 @@ export default function CoursePage() {
         setCurrentPage(1); // Reiniciar a la primera página al aplicar filtros
     };
 
-    //Lógica de paginación
-    const indexOfLastCurso = currentPage * cursosPerPage;
-    const indexOfFirstCurso = indexOfLastCurso - cursosPerPage; 
+    //Lógica de paginación - ✅ CORREGIDO: usar itemsPerPage
+    const indexOfLastCurso = currentPage * itemsPerPage;
+    const indexOfFirstCurso = indexOfLastCurso - itemsPerPage; 
     const currentCursos = filteredCursos.slice(indexOfFirstCurso, indexOfLastCurso);
-    const totalPages = Math.ceil(filteredCursos.length / cursosPerPage);
+    const totalPages = Math.ceil(filteredCursos.length / itemsPerPage);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     useEffect(() => {
@@ -131,7 +131,7 @@ export default function CoursePage() {
                         
                         {/* Filtros */}
                         <div className="row">
-                            <div className="col-md-12">
+                            <div className="col-lg-3">  {/* ✅ Sidebar para filtros */}
                                 <div className="filters-container">
                                     <h4 className="filter-title">Filtros</h4>
                                     
@@ -152,39 +152,46 @@ export default function CoursePage() {
                                     
                                     <div className="filter-group">
                                         <label className="filter-label">Categoría</label>
-                                        <select className="form-select">
+                                        <select 
+                                            className="form-select" 
+                                            value={selectedCategory}
+                                            onChange={(e) => setSelectedCategory(e.target.value)}
+                                        >
                                             <option value="">Todas las categorías</option>
                                             <option value="logistica">Logística</option>
                                             <option value="inventarios">Inventarios</option>
-                                            <option value="transporte">Transporte</option>
+                                            <option value="gestion">Gestión</option>
                                         </select>
                                     </div>
                                     
                                     <div className="filter-group">
-                                        <label className="filter-label">Precio</label>
-                                        <select className="form-select">
+                                        <label className="filter-label">Rango de precio</label>
+                                        <select 
+                                            className="form-select" 
+                                            value={selectedPriceRange}
+                                            onChange={(e) => setSelectedPriceRange(e.target.value)}
+                                        >
                                             <option value="">Todos los precios</option>
-                                            <option value="0-10000">Hasta $10.000</option>
-                                            <option value="10000-20000">$10.000 - $20.000</option>
-                                            <option value="20000+">Más de $20.000</option>
+                                            <option value="0-50000">$0 - $50.000</option>
+                                            <option value="50000-100000">$50.000 - $100.000</option>
+                                            <option value="100000+">$100.000+</option>
                                         </select>
                                     </div>
                                     
-                                    <button className="btn btn-apply-filters w-100 mt-3" onClick={fetchCursos}>
+                                    <button className="btn btn-apply-filters" onClick={applyFilters}>
                                         <FaFilter className="me-2" /> Aplicar Filtros
                                     </button>
-
-                                    <div className='mt-3 text-center'>
-                                        <small className='text-muted'>Mostrando {currentCursos.length} de 
-                                            {filteredCursos.length} cursos
+                                    
+                                    <div className="mt-3">
+                                        <small className="text-muted">
+                                            Mostrando {currentCursos.length} de {filteredCursos.length} cursos
                                         </small>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div className="col-lg-9">
-                                <CourseList 
-                                    cursos={currentCursos}/>
+                            <div className="col-lg-9">  {/* ✅ Contenido principal */}
+                                <CourseList cursos={currentCursos}/>
                                 {/* Paginación dinámica */}
                                 {totalPages > 1 && (
                                     <div className="pagination-container">
