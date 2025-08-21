@@ -1,35 +1,34 @@
 import { useState, useEffect, useRef } from 'react';
 
 export default function useLoadingWithTimeout(timeoutMs = 60000) {
-    const [Loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false); // Corregido: era 'Loading'
     const [progress, setProgress] = useState(0);
-    const [showTimeOut, serShowTimeOut] = useState(false);
+    const [showTimeout, setShowTimeout] = useState(false); // Corregido: era 'serShowTimeOut'
     const intervalRef = useRef(null);
     const timeoutRef = useRef(null);
 
     const startLoading = () => {
         setLoading(true);
         setProgress(0);
-        serShowTimeOut(false);
+        setShowTimeout(false);
 
-        //simulación de progreso
+        // Simulación de progreso
         intervalRef.current = setInterval(() => {
             setProgress((prev) => {
                 if (prev >= 90) return prev; // Evita que el progreso supere el 90%
                 return prev + Math.random() * 10; // Incremento aleatorio entre 0 y 10
-
             });
         }, 2000);
 
         timeoutRef.current = setTimeout(() => {
-            serShowTimeOut(true);
+            setShowTimeout(true);
         }, 30000); // 30 segundos
     };
 
     const stopLoading = () => {
         setLoading(false);
-        setProgress(0);
-        serShowTimeOut(false);
+        setProgress(100); // Completar al 100% al finalizar
+        setShowTimeout(false);
 
         if (intervalRef.current) {
             clearInterval(intervalRef.current);
@@ -40,6 +39,11 @@ export default function useLoadingWithTimeout(timeoutMs = 60000) {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
         }
+
+        // Resetear progreso después de un breve delay
+        setTimeout(() => {
+            setProgress(0);
+        }, 500);
     };
 
     useEffect(() => {
@@ -56,8 +60,8 @@ export default function useLoadingWithTimeout(timeoutMs = 60000) {
     return {
         loading,
         progress,
-        showTimeOut,
-        startLoading,   
+        showTimeout,
+        startLoading,
         stopLoading
     };
 }
