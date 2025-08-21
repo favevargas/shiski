@@ -23,14 +23,17 @@ export default function MiPerfil() {
 
   // Datos simulados para cursos y compras
   const [cursos] = useState([
-    { nombre: 'Introducción al Esquí', progreso: 85, certificado: false },
-    { nombre: 'Técnicas Avanzadas', progreso: 100, certificado: true },
-    { nombre: 'Esquí de Montaña', progreso: 45, certificado: false }
+    { nombre: 'Logística avanzada', progreso: 85, certificado: false },
+    { nombre: 'Técnicas Avanzadas de Logística', progreso: 100, certificado: true },
+
+    { nombre: 'Control en cadena de suministro', progreso: 45, certificado: false }
   ]);
 
   const [compras] = useState([
-    { nombre: 'Curso Básico de Esquí', tipo: 'Curso', fecha: '2024-01-15' },
-    { nombre: 'Equipo Completo', tipo: 'Equipo', fecha: '2024-02-20' }
+    { nombre: 'Curso Básico de Logística', tipo: 'Curso', fecha: '2024-01-15' },
+
+    { nombre: 'Equipo de Logística', tipo: 'Equipo', fecha: '2024-02-20' }
+
   ]);
 
   // Cargar perfil del usuario
