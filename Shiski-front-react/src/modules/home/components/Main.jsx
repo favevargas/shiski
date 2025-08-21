@@ -63,7 +63,7 @@ export default function Main() {
     const fetchCourses = async () => {
       try {
         setLoading(true);
-        const data = await getAllCursos();
+        const data = await cursoService.getAllCursos();
         setCourses(data);
         setError(null);
       } catch (error) {
