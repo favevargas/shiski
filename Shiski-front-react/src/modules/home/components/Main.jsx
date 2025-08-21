@@ -1,11 +1,7 @@
 import { Link } from "react-router-dom";
 import { FaTruck, FaWarehouse, FaChartLine, FaUserTie, FaArrowRight, FaStar } from "react-icons/fa";
-
-const COURSES = [
-  {id:1, name: "Gestión de Cadena de Suministro", price: 79990, img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80'},
-  {id:2, name: "Logística Internacional", price: 89990, img: 'https://mecaluxmx.cdnwm.com/img/blog/logistica-internacional.1.12.jpg'},
-  {id:3, name: "Optimización de Rutas", price: 69990, img: 'https://duyou.com.mx/wp-content/uploads/2023/07/logistica-transporte-buques-carga-contenedores-aviones-carga-puente-grua-funcionamiento-astillero-al-amanecer-antecedentes-logisticos-industria-importacion-exportacion-transporte-ai-generativo-1-scaled.jpg'},
-];
+import { useState, useEffect } from 'react';
+import { getAllCursos } from '../../api/services/cursoService';
 
 const BLOG_POSTS = [
   {
@@ -59,6 +55,34 @@ const TESTIMONIALS = [
 ];
 
 export default function Main() {
+  const [courses, setCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        setLoading(true);
+        const data = await getAllCursos();
+        setCourses(data);
+        setError(null);
+      } catch (error) {
+        console.error('Error al obtener cursos:', error);
+        setError('Error al cargar los cursos');
+        // Usar datos de respaldo en caso de error
+        setCourses([
+          {id:1, titulo: "Gestión de Cadena de Suministro", precio: 79990, imagenMiniatura: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80'},
+          {id:2, titulo: "Logística Internacional", precio: 89990, imagenMiniatura: 'https://mecaluxmx.cdnwm.com/img/blog/logistica-internacional.1.12.jpg'},
+          {id:3, titulo: "Optimización de Rutas", precio: 69990, imagenMiniatura: 'https://duyou.com.mx/wp-content/uploads/2023/07/logistica-transporte-buques-carga-contenedores-aviones-carga-puente-grua-funcionamiento-astillero-al-amanecer-antecedentes-logisticos-industria-importacion-exportacion-transporte-ai-generativo-1-scaled.jpg'}
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
   return(
     <>
       {/* Servicios */}
@@ -110,16 +134,18 @@ export default function Main() {
       <section className="py-5 bg-light">
         <div className="container">
           <h2 className="section-title">Cursos destacados</h2>
+          {loading && <div className="text-center">Cargando cursos...</div>}
+          {error && <div className="alert alert-warning text-center">{error}</div>}
           <div className="row g-4">
-            {COURSES.map(course => (
+            {courses.map(course => (
               <div className="col-md-6 col-lg-4" key={course.id}>
                 <div className="card h-100 shadow-sm blog-card">
                   <div className="blog-image">
-                    <img src={course.img} alt={course.name} />
+                    <img src={course.imagenMiniatura || course.img} alt={course.titulo || course.name} />
                   </div>
                   <div className="card-body d-flex flex-column">
-                    <h5 className="card-title">{course.name}</h5>
-                    <p className="card-text text-success fw-bold mb-4">${course.price.toLocaleString('es-CL')}</p>
+                    <h5 className="card-title">{course.titulo || course.name}</h5>
+                    <p className="card-text text-success fw-bold mb-4">${(course.precio || course.price).toLocaleString('es-CL')}</p>
                     <Link to={`/courses/${course.id}`} className="btn btn-view-details mt-auto">Ver detalles</Link>
                   </div>
                 </div>
@@ -147,7 +173,7 @@ export default function Main() {
                     <span className="blog-category">{post.category}</span>
                     <h3 className="blog-title">{post.title}</h3>
                     <p className="blog-excerpt">{post.excerpt}</p>
-                    <Link to="/blog" className="blog-link">
+                    <Link to={`/blog/${post.id}`} className="blog-link">
                       Leer más <FaArrowRight />
                     </Link>
                   </div>
@@ -155,35 +181,28 @@ export default function Main() {
               </div>
             ))}
           </div>
-          <div className="text-center mt-4">
-            <Link to="/blog" className="btn btn-outline-success">Ver todas las publicaciones</Link>
-          </div>
         </div>
       </section>
 
       {/* Testimonios */}
       <section className="testimonials-section">
         <div className="container">
-          <h2 className="section-title">Testimonios</h2>
+          <h2 className="section-title">Lo que dicen nuestros clientes</h2>
           <div className="row g-4">
             {TESTIMONIALS.map(testimonial => (
               <div className="col-md-6 col-lg-4" key={testimonial.id}>
                 <div className="testimonial-card">
-                  <div className="testimonial-content">
-                    {testimonial.content}
+                  <div className="testimonial-rating">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <FaStar key={i} className="star-filled" />
+                    ))}
                   </div>
+                  <p className="testimonial-content">"{testimonial.content}"</p>
                   <div className="testimonial-author">
-                    <div className="testimonial-avatar">
-                      <img src={testimonial.avatar} alt={testimonial.name} />
-                    </div>
-                    <div className="testimonial-info">
-                      <h4>{testimonial.name}</h4>
-                      <p>{testimonial.position}</p>
-                      <div className="testimonial-rating">
-                        {[...Array(testimonial.rating)].map((_, i) => (
-                          <FaStar key={i} />
-                        ))}
-                      </div>
+                    <img src={testimonial.avatar} alt={testimonial.name} className="author-avatar" />
+                    <div className="author-info">
+                      <h4 className="author-name">{testimonial.name}</h4>
+                      <p className="author-position">{testimonial.position}</p>
                     </div>
                   </div>
                 </div>

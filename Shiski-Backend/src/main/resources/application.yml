@@ -1,5 +1,4 @@
 #configuraci�n del perfil
-
 spring:
   application:
     name: shiski

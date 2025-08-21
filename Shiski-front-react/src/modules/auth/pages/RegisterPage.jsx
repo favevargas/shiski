@@ -33,7 +33,7 @@ export default function RegisterPage() {
 
       await register(userData);
       setAlert({ show: true, msg: 'Registro exitoso 🎉', variant: 'success' });
-      setTimeout(() => navigate('/'), 1000);
+      setTimeout(() => navigate('/login'), 1000); // Redirigir al login después del registro
     } catch (error) {
       setAlert({ show: true, msg: error.message || 'No se pudo registrar', variant: 'danger' });
     } finally {

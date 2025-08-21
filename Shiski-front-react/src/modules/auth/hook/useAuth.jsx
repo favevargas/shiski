@@ -19,7 +19,13 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const data = await authService.login(credentials);
-      setUser(data.user);
+      // Corregir: usar directamente los datos del usuario desde la respuesta
+      const userData = {
+        nombre: data.nombre,
+        email: data.email,
+        roles: data.roles
+      };
+      setUser(userData);
       return data;
     } catch (error) {
       throw error;
@@ -31,7 +37,8 @@ export const AuthProvider = ({ children }) => {
       const data = await authService.register(userData);
       return { ok: true, data };
     } catch (error) {
-      return { ok: false, message: error.response?.data?.message || 'Error en el registro' };
+      // Mejorar el manejo de errores para el registro
+      throw new Error(error.response?.data?.message || 'Error en el registro');
     }
   };
 
