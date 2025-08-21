@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { FaTruck, FaWarehouse, FaChartLine, FaUserTie, FaArrowRight, FaStar } from "react-icons/fa";
 import { useState, useEffect } from 'react';
-import { getAllCursos } from '../../api/services/cursoService';
+import cursoService from '../../api/services/cursoService';
 
 const BLOG_POSTS = [
   {
