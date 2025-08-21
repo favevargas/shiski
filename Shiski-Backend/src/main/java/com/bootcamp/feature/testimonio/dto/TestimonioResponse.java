@@ -10,5 +10,6 @@ public record TestimonioResponse(
         Long cursoId,
         String tituloCurso,
         Long usuarioId,
-        String nombreUsuario
+        String nombreUsuario,
+        String avatarUsuario
 ) {}

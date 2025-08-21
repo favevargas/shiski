@@ -26,7 +26,8 @@ public class TestimonioMapper {
             testimonio.getCurso() != null ? testimonio.getCurso().getId() : null,
             testimonio.getCurso() != null ? testimonio.getCurso().getTitulo() : "Curso desconocido",
             testimonio.getUsuario() != null ? testimonio.getUsuario().getId() : null,
-            testimonio.getUsuario() != null ? testimonio.getUsuario().getNombre() : "Usuario desconocido"
+            testimonio.getUsuario() != null ? testimonio.getUsuario().getNombre() : "Usuario desconocido",
+            testimonio.getUsuario() != null ? testimonio.getUsuario().getAvatar() : null
         );
     }
 }

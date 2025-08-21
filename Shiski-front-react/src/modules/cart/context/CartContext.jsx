@@ -64,14 +64,24 @@ export const CartProvider = ({ children }) => {
     localStorage.removeItem('cart');
   };
 
-  // Valores y funciones que expondremos en el contexto
+  // Nueva función para sincronizar con backend
+  const syncWithBackend = (backendCartItems) => {
+    setCartItems(backendCartItems.map(item => ({
+      id: item.cursoId,
+      carritoId: item.id, // ID del carrito en backend
+      name: item.cursoNombre,
+      price: item.precioMomento,
+      // ... otros campos necesarios
+    })));
+  };
+
   const value = {
     cartItems,
-    total,
     addToCart,
     removeFromCart,
     clearCart,
-    itemCount: cartItems.length
+    total,
+    syncWithBackend // Nueva función
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

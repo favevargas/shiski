@@ -1,0 +1,72 @@
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+}
+
+.spinner-sm {
+    padding: 1rem;
+}
+
+.spinner-sm .spinner-border {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.spinner-md {
+    padding: 4rem;
+}
+
+.spinner-md .spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+.spinner-lg {
+    padding: 3rem;
+}
+
+.spinner-lg .spinner-border {
+    width: 4rem;
+    height: 4rem;
+}
+
+.loading-message {
+    margin-top: 1rem;
+    max-width: 300px;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.507);
+    display: flex;
+    align-items: center;    
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loading-overlay-content {
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.progress {
+    height: 8px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background-color: #1c5211;
+    transition: width 0.3s ease;
+}

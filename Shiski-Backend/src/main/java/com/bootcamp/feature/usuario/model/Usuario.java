@@ -21,6 +21,7 @@ public class Usuario {
     private String nombre;
     private String email;
     private String password;
+    private String avatar;
 
     @Column(name = "fecha_registro")
     private LocalDateTime fechaRegistro;

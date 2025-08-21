@@ -48,26 +48,6 @@ export default function CourseList({ cursos = [] }) {
           </div>
         ))}
       </div>
-      
-      <div className="pagination-container">
-        <ul className="pagination">
-          <li className="pagination-item">
-            <a href="#" className="pagination-link">1</a>
-          </li>
-          <li className="pagination-item">
-            <a href="#" className="pagination-link">2</a>
-          </li>
-          <li className="pagination-item">
-            <a href="#" className="pagination-link active">3</a>
-          </li>
-          <li className="pagination-item">
-            <a href="#" className="pagination-link">4</a>
-          </li>
-          <li className="pagination-item">
-            <a href="#" className="pagination-link">5</a>
-          </li>
-        </ul>
-      </div>
     </div>
   );
 }

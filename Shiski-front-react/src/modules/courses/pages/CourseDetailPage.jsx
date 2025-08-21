@@ -154,7 +154,8 @@ export default function CourseDetailPage() {
                 curso.testimonios.map((testimonio, index) => (
                   <div key={index} className="testimonial-card">
                     <div className="testimonial-header">
-                      <img src={testimonio.fotoPerfil || 'https://via.placeholder.com/50'} alt={testimonio.nombreUsuario} className="testimonial-avatar" />
+                      <img src={testimonio.avatarUsuario ||  `https://ui-avatars.com/api/?name=${encodeURIComponent(testimonio.nombreUsuario)}&background=0D8ABC&color=fff`} 
+                        alt={testimonio.nombreUsuario} className="testimonial-avatar" />
                       <div>
                         <h4>{testimonio.nombreUsuario}</h4>
                         <div className="testimonial-rating">
