@@ -101,18 +101,19 @@ export default function CourseDetailPage() {
         <div className="tab-content">
           {activeTab === 'descripcion' && (
             <div className="description-tab">
-              <p>{course.description || 'Sistema de gestión de inventarios avanzado que monitorea en tiempo real el estado de materiales, reduce costos y mejora la eficiencia de los procesos de la empresa.'}</p>
+              <p>{curso.descripcion || 'Sistema de gestión de inventarios avanzado que monitorea en tiempo real el estado de materiales, reduce costos y mejora la eficiencia de los procesos de la empresa.'}</p>
             </div>
           )}
 
           {activeTab === 'contenido' && (
             <div className="content-tab">
               <ul className="content-list">
-                {course.content && course.content.length > 0 ? (
-                  course.content.map((item, index) => (
+                {curso.temario ? (
+                  // Si temario es un string, lo dividimos por líneas o puntos
+                  curso.temario.split('\n').filter(item => item.trim()).map((item, index) => (
                     <li key={index} className="content-item">
                       <span className="content-icon">✓</span>
-                      {item}
+                      {item.trim()}
                     </li>
                   ))
                 ) : (
@@ -131,9 +132,10 @@ export default function CourseDetailPage() {
           {activeTab === 'requisitos' && (
             <div className="requirements-tab">
               <ul className="requirements-list">
-                {course.requirements && course.requirements.length > 0 ? (
-                  course.requirements.map((req, index) => (
-                    <li key={index} className="requirement-item">{req}</li>
+                {curso.requisitos ? (
+                  // Si requisitos es un string, lo dividimos por líneas o puntos
+                  curso.requisitos.split('\n').filter(req => req.trim()).map((req, index) => (
+                    <li key={index} className="requirement-item">{req.trim()}</li>
                   ))
                 ) : (
                   <>
@@ -148,23 +150,23 @@ export default function CourseDetailPage() {
 
           {activeTab === 'testimonios' && (
             <div className="testimonials-tab">
-              {course.testimonials && course.testimonials.length > 0 ? (
-                course.testimonials.map((testimonial, index) => (
+              {curso.testimonios && curso.testimonios.length > 0 ? (
+                curso.testimonios.map((testimonio, index) => (
                   <div key={index} className="testimonial-card">
                     <div className="testimonial-header">
-                      <img src={testimonial.avatar || 'https://via.placeholder.com/50'} alt={testimonial.name} className="testimonial-avatar" />
+                      <img src={testimonio.fotoPerfil || 'https://via.placeholder.com/50'} alt={testimonio.nombreUsuario} className="testimonial-avatar" />
                       <div>
-                        <h4>{testimonial.name}</h4>
+                        <h4>{testimonio.nombreUsuario}</h4>
                         <div className="testimonial-rating">
                           {[...Array(5)].map((_, i) => (
-                            <span key={i} className={i < testimonial.rating ? 'star filled' : 'star'}>
+                            <span key={i} className={i < testimonio.calificacion ? 'star filled' : 'star'}>
                               ★
                             </span>
                           ))}
                         </div>
                       </div>
                     </div>
-                    <p className="testimonial-text">{testimonial.text}</p>
+                    <p className="testimonial-text">{testimonio.comentario}</p>
                   </div>
                 ))
               ) : (

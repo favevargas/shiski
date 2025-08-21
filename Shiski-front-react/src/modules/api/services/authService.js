@@ -14,7 +14,7 @@ const authService = {
         const userData = {
           nombre: response.data.nombre,
           email: response.data.email,
-          roles: response.data.roles
+          roles: [response.data.roles] // Convertir string a array
         };
         storage.setItem('user', JSON.stringify(userData));
       }
