@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../../auth/hook/useAuth';
 import { Link } from 'react-router-dom';
-import { FaTrashAlt, FaArrowLeft, FaShoppingCart } from 'react-icons/fa';
+import { FaTrashAlt, FaArrowLeft, FaShoppingCart, FaUser, FaUserPlus } from 'react-icons/fa';
 import carritoService from '../../api/services/carritoService';
 import LoadingSpinner from '../../layouts/components/LoadingSpinner';
 import Toast from '../../layouts/components/Toast';
@@ -10,7 +10,7 @@ import useLoadingWithTimeout from '../../layouts/hook/useLoadingWithTimeout';
 import '../styles/Cart.css';
 
 function CartPage() {
-  const { cartItems, removeFromCart, clearCart, total, syncWithBackend } = useCart();
+  const { cartItems, removeFromCart, clearCart, total, syncWithBackend, isAuthenticated } = useCart();
   const { user } = useAuth();
   const [toast, setToast] = useState({ show: false, variant: 'info', title: '', message: '' });
   const { loading, progress, showTimeout, startLoading, stopLoading } = useLoadingWithTimeout();
@@ -214,6 +214,42 @@ function CartPage() {
       </div>
     </div>
   );
+  // Mostrar mensaje si no está autenticado
+  if (!isAuthenticated) {
+    return (
+      <div className="cart-page">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-md-8">
+              <div className="empty-cart">
+                <FaShoppingCart className="empty-cart-icon" />
+                <h2 className="mb-3">¡Inicia sesión para ver tu carrito!</h2>
+                <p className="text-muted mb-4">
+                  Para agregar cursos al carrito y realizar compras necesitas tener una cuenta.
+                </p>
+                <div className="d-grid gap-2 d-md-flex justify-content-md-center">
+                  <Link to="/login" className="btn btn-primary btn-lg me-md-2">
+                    <FaUser className="me-2" />
+                    Iniciar Sesión
+                  </Link>
+                  <Link to="/register" className="btn btn-outline-primary btn-lg">
+                    <FaUserPlus className="me-2" />
+                    Crear Cuenta
+                  </Link>
+                </div>
+                <div className="mt-4">
+                  <Link to="/courses" className="btn btn-continue">
+                    <FaArrowLeft className="me-2" />
+                    Ver Cursos
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default CartPage;

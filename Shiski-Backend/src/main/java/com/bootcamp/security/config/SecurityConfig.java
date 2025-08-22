@@ -30,6 +30,15 @@ public class SecurityConfig {
     // 🔹 Se puede cambiar en application.properties
     @Value("${app.security.cors.dev:true}")
     private boolean devCorsEnabled;
+    @Value("${IP_BACKEND")
+    private String ipBackend;
+
+    @Value("${IP_FRONTEND}")
+    private String ipFrontend;
+
+    @Value("${IP_LOCAL}")
+    private String ipLocal;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -43,9 +52,9 @@ public class SecurityConfig {
             http.cors(cors -> cors.configurationSource(request -> {
                 var corsConfig = new CorsConfiguration();
                 corsConfig.setAllowedOrigins(List.of(
-                        "https://shiski.onrender.com",
-                        "https://shiski.vercel.app",
-                        "http://localhost:5173"
+                        ipBackend,
+                        ipFrontend,
+                        ipLocal
                 )); // React Dev
                 corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
                 corsConfig.setAllowedHeaders(List.of("*"));

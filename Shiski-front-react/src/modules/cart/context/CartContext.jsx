@@ -16,22 +16,64 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
-  // Cargar carrito desde localStorage al iniciar
+  // Verificar autenticación al cargar
   useEffect(() => {
-    const storedCart = localStorage.getItem('cart');
-    if (storedCart) {
-      const parsedCart = JSON.parse(storedCart);
-      setCartItems(parsedCart);
-      calculateTotal(parsedCart);
-    }
+    const checkAuth = () => {
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user') || 'null');
+      setIsAuthenticated(!!token);
+      setCurrentUser(user);
+    };
+    
+    checkAuth();
+    
+    // Escuchar cambios en el storage
+    window.addEventListener('storage', checkAuth);
+    return () => window.removeEventListener('storage', checkAuth);
   }, []);
 
-  // Actualizar localStorage cuando cambia el carrito
+  // Función para obtener la clave del carrito por usuario
+  const getCartKey = (userId) => {
+    return userId ? `cart_user_${userId}` : 'cart_guest';
+  };
+
+  // Cargar carrito desde localStorage cuando cambia el usuario
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cartItems));
+    if (isAuthenticated && currentUser?.email) {
+      // Usuario autenticado: cargar su carrito específico
+      const cartKey = getCartKey(currentUser.email);
+      const storedCart = localStorage.getItem(cartKey);
+      if (storedCart) {
+        const parsedCart = JSON.parse(storedCart);
+        setCartItems(parsedCart);
+        calculateTotal(parsedCart);
+      } else {
+        // Si no hay carrito guardado, inicializar vacío
+        setCartItems([]);
+        setTotal(0);
+      }
+    } else {
+      // Usuario no autenticado: limpiar carrito
+      setCartItems([]);
+      setTotal(0);
+    }
+  }, [currentUser, isAuthenticated]);
+
+  // Actualizar localStorage cuando cambia el carrito (solo si está autenticado)
+  useEffect(() => {
+    if (isAuthenticated && currentUser?.email) {
+      const cartKey = getCartKey(currentUser.email);
+      if (cartItems.length > 0) {
+        localStorage.setItem(cartKey, JSON.stringify(cartItems));
+      } else {
+        localStorage.removeItem(cartKey);
+      }
+    }
     calculateTotal(cartItems);
-  }, [cartItems]);
+  }, [cartItems, currentUser, isAuthenticated]);
 
   // Calcular el total del carrito
   const calculateTotal = (items) => {
@@ -39,33 +81,56 @@ export const CartProvider = ({ children }) => {
     setTotal(sum);
   };
 
-  // Agregar un curso al carrito
+  // Agregar un curso al carrito (solo si está autenticado)
   const addToCart = (course) => {
+    if (!isAuthenticated) {
+      return { 
+        success: false, 
+        message: 'Debes iniciar sesión para agregar cursos al carrito.',
+        requiresAuth: true,
+        courseName: course.titulo || course.name || 'este curso'
+      };
+    }
+
     // Verificar si el curso ya está en el carrito
     const isCourseInCart = cartItems.some(item => item.id === course.id);
     
     if (!isCourseInCart) {
       setCartItems([...cartItems, course]);
-      return { success: true, message: `${course.titulo || course.name || 'Curso'} ha sido agregado al carrito!` };
+      return { 
+        success: true, 
+        message: `${course.titulo || course.name || 'Curso'} ha sido agregado al carrito!`,
+        requiresAuth: false
+      };
     } else {
-      return { success: false, message: `${course.titulo || course.name || 'Curso'} ya está en el carrito.` };
+      return { 
+        success: false, 
+        message: `${course.titulo || course.name || 'Curso'} ya está en el carrito.`,
+        requiresAuth: false
+      };
     }
   };
 
   // Eliminar un curso del carrito
   const removeFromCart = (id) => {
+    if (!isAuthenticated) return;
     const updatedCart = cartItems.filter(item => item.id !== id);
     setCartItems(updatedCart);
   };
 
   // Vaciar el carrito
   const clearCart = () => {
+    if (!isAuthenticated) return;
     setCartItems([]);
-    localStorage.removeItem('cart');
+    if (currentUser?.email) {
+      const cartKey = getCartKey(currentUser.email);
+      localStorage.removeItem(cartKey);
+    }
   };
 
   // Nueva función para sincronizar con backend
   const syncWithBackend = (backendCartItems) => {
+    if (!isAuthenticated) return;
     setCartItems(backendCartItems.map(item => ({
       id: item.cursoId,
       carritoId: item.id, // ID del carrito en backend
@@ -82,7 +147,8 @@ export const CartProvider = ({ children }) => {
     clearCart,
     total,
     itemCount: cartItems.length, 
-    syncWithBackend
+    syncWithBackend,
+    isAuthenticated // Exponer el estado de autenticación
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

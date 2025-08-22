@@ -1,14 +1,25 @@
+import { useState } from 'react';
 import { useCart } from '../../cart/context/CartContext';
 import { Link } from 'react-router-dom';
 import { FaShoppingCart, FaEye } from 'react-icons/fa';
+import AuthModal from '../../layouts/components/AuthModal';
 
 // Recibir cursos como props en lugar de usar dummyData
 export default function CourseList({ cursos = [] }) {
-  const { addToCart } = useCart();
+  const { addToCart, isAuthenticated } = useCart();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [selectedCourseName, setSelectedCourseName] = useState('');
   
   const handleAddToCart = (course) => {
     const result = addToCart(course);
-    alert(result.message);
+    
+    if (result.requiresAuth) {
+      setSelectedCourseName(result.courseName);
+      setShowAuthModal(true);
+    } else {
+      // Mostrar toast o alert para otros casos
+      alert(result.message);
+    }
   };
 
   return (
@@ -37,17 +48,26 @@ export default function CourseList({ cursos = [] }) {
                   className="btn btn-add-cart"
                   onClick={() => handleAddToCart({
                     id: curso.id,
+                    titulo: curso.titulo || curso.name,
                     name: curso.titulo || curso.name,
                     price: curso.precio || curso.price,
                     img: curso.imagenMiniatura || curso.img
                   })}>
-                  <FaShoppingCart className="me-2" /> Agregar al carrito
+                  <FaShoppingCart className="me-2" /> 
+                  Agregar al carrito
                 </button>
               </div>
             </div>
           </div>
         ))}
       </div>
+      
+      {/* Modal de autenticación */}
+      <AuthModal 
+        show={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        courseName={selectedCourseName}
+      />
     </div>
   );
 }
