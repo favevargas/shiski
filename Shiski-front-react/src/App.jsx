@@ -16,31 +16,29 @@ import { AuthProvider } from './modules/auth/hook/useAuth.jsx';
 
 
 function App() {
-
   return (
-   <CartProvider>
-     <BrowserRouter>
+    <BrowserRouter>
       <AuthProvider>
+        <CartProvider>
           <Routes>
             <Route element={<Layout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/courses" element={<CoursePage />} />
-            <Route path="/courses/:id" element={<CourseDetailPage />} />
-            <Route path="/cart" element={<CartPage />} />
-            <Route path="/about-us" element={<AboutUsPage />} />
-            <Route path="/business" element={<BusinessPage />} />
-            <Route path="/blog" element={<BlogPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-            <Route path="/mi-perfil" element={<MiPerfil />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Route>
-        </Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/courses" element={<CoursePage />} />
+              <Route path="/courses/:id" element={<CourseDetailPage />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/about-us" element={<AboutUsPage />} />
+              <Route path="/business" element={<BusinessPage />} />
+              <Route path="/blog" element={<BlogPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/mi-perfil" element={<MiPerfil />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Route>
+          </Routes>
+        </CartProvider>
       </AuthProvider>
     </BrowserRouter>
-   </CartProvider>
-    
   )
 }
 

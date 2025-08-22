@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useContext } from 'react';
+import { useAuth } from '../../auth/hook/useAuth';
 
 // Creamos el contexto
 const CartContext = createContext();
@@ -16,8 +17,7 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
+  const { user, isAuthenticated } = useAuth(); // Usar el estado del AuthContext
 
   // Verificar autenticación al cargar
   useEffect(() => {
@@ -42,9 +42,9 @@ export const CartProvider = ({ children }) => {
 
   // Cargar carrito desde localStorage cuando cambia el usuario
   useEffect(() => {
-    if (isAuthenticated && currentUser?.email) {
+    if (isAuthenticated && user?.email) {
       // Usuario autenticado: cargar su carrito específico
-      const cartKey = getCartKey(currentUser.email);
+      const cartKey = getCartKey(user.email);
       const storedCart = localStorage.getItem(cartKey);
       if (storedCart) {
         const parsedCart = JSON.parse(storedCart);
@@ -60,12 +60,12 @@ export const CartProvider = ({ children }) => {
       setCartItems([]);
       setTotal(0);
     }
-  }, [currentUser, isAuthenticated]);
+  }, [user, isAuthenticated]);
 
   // Actualizar localStorage cuando cambia el carrito (solo si está autenticado)
   useEffect(() => {
-    if (isAuthenticated && currentUser?.email) {
-      const cartKey = getCartKey(currentUser.email);
+    if (isAuthenticated && user?.email) {
+      const cartKey = getCartKey(user.email);
       if (cartItems.length > 0) {
         localStorage.setItem(cartKey, JSON.stringify(cartItems));
       } else {
@@ -73,7 +73,7 @@ export const CartProvider = ({ children }) => {
       }
     }
     calculateTotal(cartItems);
-  }, [cartItems, currentUser, isAuthenticated]);
+  }, [cartItems, user, isAuthenticated]);
 
   // Calcular el total del carrito
   const calculateTotal = (items) => {
@@ -148,7 +148,7 @@ export const CartProvider = ({ children }) => {
     total,
     itemCount: cartItems.length, 
     syncWithBackend,
-    isAuthenticated // Exponer el estado de autenticación
+    isAuthenticated // Ahora viene del AuthContext
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
