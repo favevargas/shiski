@@ -65,8 +65,7 @@ export default function CourseList({ cursos = [] }) {
       {/* Modal de autenticación */}
       <AuthModal 
         show={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        courseName={selectedCourseName}
+        onHide={() => setShowAuthModal(false)}
       />
     </div>
   );

@@ -1,8 +1,21 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { FaUser } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
-const AuthModal = ({ show, onHide, onLogin, onRegister }) => {
+const AuthModal = ({ show, onHide }) => {
+  const navigate = useNavigate();
+
+  const handleLogin = () => {
+    onHide();
+    navigate('/login');
+  };
+
+  const handleRegister = () => {
+    onHide();
+    navigate('/register');
+  };
+
   return (
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header closeButton>
@@ -13,13 +26,13 @@ const AuthModal = ({ show, onHide, onLogin, onRegister }) => {
           size={60} 
           style={{ color: '#255625', marginBottom: '20px' }} 
         />
-        <p>Para agregar "Fundamentos de Logística" al carrito</p>
+        <p>Para agregar cursos al carrito</p>
         <p>Necesitas tener una cuenta para poder agregar cursos al carrito y realizar compras.</p>
         
         <div className="d-grid gap-2">
           <Button 
             variant="primary" 
-            onClick={onLogin}
+            onClick={handleLogin}
             style={{
               backgroundColor: '#255625',
               borderColor: '#255625',
@@ -39,7 +52,7 @@ const AuthModal = ({ show, onHide, onLogin, onRegister }) => {
           
           <Button 
             variant="outline-primary" 
-            onClick={onRegister}
+            onClick={handleRegister}
             style={{
               color: '#255625',
               borderColor: '#255625',
@@ -59,7 +72,7 @@ const AuthModal = ({ show, onHide, onLogin, onRegister }) => {
         </div>
         
         <div className="mt-3">
-          <small>¿Ya tienes cuenta? <a href="#" onClick={onLogin} style={{ color: '#255625' }}>Inicia sesión aquí</a></small>
+          <small>¿Ya tienes cuenta? <a href="#" onClick={handleLogin} style={{ color: '#255625' }}>Inicia sesión aquí</a></small>
         </div>
       </Modal.Body>
     </Modal>

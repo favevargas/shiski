@@ -207,8 +207,7 @@ export default function CourseDetailPage() {
       {/* Modal de autenticación */}
       <AuthModal 
         show={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        courseName={curso?.titulo || 'este curso'}
+        onHide={() => setShowAuthModal(false)}
       />
       
       {/* Toast component */}
