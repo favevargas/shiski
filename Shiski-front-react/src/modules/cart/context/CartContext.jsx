@@ -46,9 +46,9 @@ export const CartProvider = ({ children }) => {
     
     if (!isCourseInCart) {
       setCartItems([...cartItems, course]);
-      return { success: true, message: `${course.name} ha sido agregado al carrito!` };
+      return { success: true, message: `${course.titulo || course.name || 'Curso'} ha sido agregado al carrito!` };
     } else {
-      return { success: false, message: `${course.name} ya está en el carrito.` };
+      return { success: false, message: `${course.titulo || course.name || 'Curso'} ya está en el carrito.` };
     }
   };
 
@@ -64,14 +64,25 @@ export const CartProvider = ({ children }) => {
     localStorage.removeItem('cart');
   };
 
-  // Valores y funciones que expondremos en el contexto
+  // Nueva función para sincronizar con backend
+  const syncWithBackend = (backendCartItems) => {
+    setCartItems(backendCartItems.map(item => ({
+      id: item.cursoId,
+      carritoId: item.id, // ID del carrito en backend
+      name: item.cursoNombre,
+      price: item.precioMomento,
+      // ... otros campos necesarios
+    })));
+  };
+
   const value = {
     cartItems,
-    total,
     addToCart,
     removeFromCart,
     clearCart,
-    itemCount: cartItems.length
+    total,
+    itemCount: cartItems.length, 
+    syncWithBackend
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

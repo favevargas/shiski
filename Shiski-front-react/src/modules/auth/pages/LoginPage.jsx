@@ -54,10 +54,8 @@ export default function LoginPage() {
               <p className="mt-3 mb-0 text-center text-body-secondary">
                 ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
               </p>
-
-              <div className="mt-3 small text-body-secondary">
-                <strong></strong> usuario: <code>demo</code> - pass: <code>1234</code>
-              </div>
+               
+              
             </div>
           </div>
 

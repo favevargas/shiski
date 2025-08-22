@@ -1,11 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hook/useAuth';
+import usuarioService from '../../api/services/usuarioService';
+import LoadingSpinner from '../../layouts/components/LoadingSpinner';
+import Toast from '../../layouts/components/Toast';
+import useLoadingWithTimeout from '../../layouts/hook/useLoadingWithTimeout';
 
 export default function MiPerfil() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [edit, setEdit] = useState(false);
+  const [inscripciones, setInscripciones] = useState([]);
+  const [toast, setToast] = useState({ show: false, variant: 'info', title: '', message: '' });
+  
+  const { loading, progress, showTimeout, startLoading, stopLoading } = useLoadingWithTimeout();
   
   const [form, setForm] = useState({
     nombre: user?.nombre || '',
@@ -13,31 +21,104 @@ export default function MiPerfil() {
     telefono: user?.telefono || '',
   });
 
-  // ✅ AGREGADO: Datos simulados para cursos y compras
+  // Datos simulados para cursos y compras
   const [cursos] = useState([
-    { nombre: 'Introducción al Esquí', progreso: 85, certificado: false },
-    { nombre: 'Técnicas Avanzadas', progreso: 100, certificado: true },
-    { nombre: 'Esquí de Montaña', progreso: 45, certificado: false }
+    { nombre: 'Logística avanzada', progreso: 85, certificado: false },
+    { nombre: 'Técnicas Avanzadas de Logística', progreso: 100, certificado: true },
+
+    { nombre: 'Control en cadena de suministro', progreso: 45, certificado: false }
   ]);
 
   const [compras] = useState([
-    { nombre: 'Curso Básico de Esquí', tipo: 'Curso', fecha: '2024-01-15' },
-    { nombre: 'Equipo Completo', tipo: 'Equipo', fecha: '2024-02-20' }
+    { nombre: 'Curso Básico de Logística', tipo: 'Curso', fecha: '2024-01-15' },
+
+    { nombre: 'Equipo de Logística', tipo: 'Equipo', fecha: '2024-02-20' }
+
   ]);
 
-  // ✅ AGREGADO: Funciones faltantes
-  const handleEdit = () => {
-    setEdit(true);
+  // Cargar perfil del usuario
+  useEffect(() => {
+    const cargarPerfil = async () => {
+      if (!user) return;
+      
+      startLoading();
+      setToast({
+        show: true,
+        variant: 'loading',
+        title: 'Cargando perfil',
+        message: 'Obteniendo información del usuario...'
+      });
+      
+      try {
+        // Usar la función correcta del usuarioService
+        const perfilData = await usuarioService.getUserProfile();
+        
+        // Actualizar el formulario con los datos del perfil
+        setForm({
+          nombre: perfilData.nombre || user.nombre || '',
+          email: perfilData.email || user.email || '',
+          telefono: perfilData.telefono || '',
+        });
+        
+        setToast({
+          show: true,
+          variant: 'success',
+          title: 'Perfil cargado',
+          message: 'Información cargada correctamente'
+        });
+      } catch (error) {
+        console.error('Error al cargar perfil:', error);
+        setToast({
+          show: true,
+          variant: 'error',
+          title: 'Error',
+          message: 'No se pudo cargar la información del perfil'
+        });
+      } finally {
+        stopLoading();
+      }
+    };
+
+    cargarPerfil();
+  }, [user]);
+
+  const handleSave = async () => {
+    if (!user) return;
+    
+    startLoading();
+    setToast({
+      show: true,
+      variant: 'loading',
+      title: 'Guardando',
+      message: 'Actualizando tu perfil...'
+    });
+    
+    try {
+      // Usar la función correcta del usuarioService
+      await usuarioService.updateUserProfile(form);
+      setEdit(false);
+      
+      setToast({
+        show: true,
+        variant: 'success',
+        title: 'Perfil actualizado',
+        message: 'Tus datos se guardaron correctamente'
+      });
+    } catch (error) {
+      console.error('Error al actualizar perfil:', error);
+      setToast({
+        show: true,
+        variant: 'error',
+        title: 'Error',
+        message: 'No se pudo actualizar tu perfil'
+      });
+    } finally {
+      stopLoading();
+    }
   };
 
-  const handleSave = () => {
-    // console.log('Guardando datos:', form); // ✅ Remover esta línea
-    setForm({
-      nombre: user?.nombre || '',
-      email: user?.email || '',
-      telefono: user?.telefono || '',
-    });
-    setEdit(false);
+  const handleEdit = () => {
+    setEdit(true);
   };
 
   const handleCancel = () => {
@@ -58,6 +139,27 @@ export default function MiPerfil() {
 
   return (
     <div className="container py-5 position-relative">
+      {/* Renderizar LoadingSpinner cuando esté cargando */}
+      {loading && (
+        <LoadingSpinner 
+          progress={progress}
+          message={showTimeout ? "La operación está tomando más tiempo del esperado..." : "Cargando información del perfil..."}
+          overlay={true}
+        />
+      )}
+      
+      {/* Renderizar Toast para notificaciones */}
+      {toast.show && (
+        <Toast
+          variant={toast.variant}
+          title={toast.title}
+          message={toast.message}
+          onClose={() => setToast({ ...toast, show: false })}
+          position="top-right"
+          autoClose={toast.variant !== 'loading'}
+        />
+      )}
+      
       <button
         className="btn btn-outline-danger position-absolute end-0 top-0 mt-3 me-3"
         style={{ minWidth: 120 }}
@@ -95,9 +197,9 @@ export default function MiPerfil() {
                 </>
               ) : (
                 <>
-                  <p><b>Nombre:</b> {user?.nombre}</p>
-                  <p><b>Email:</b> {user?.email}</p>
-                  <p><b>Teléfono:</b> {user?.telefono || 'No especificado'}</p>
+                  <p><b>Nombre:</b> {form.nombre || user?.nombre}</p>
+                  <p><b>Email:</b> {form.email || user?.email}</p>
+                  <p><b>Teléfono:</b> {form.telefono || 'No especificado'}</p>
                   <button className="btn btn-cta-home" onClick={handleEdit}>Editar</button>
                 </>
               )}

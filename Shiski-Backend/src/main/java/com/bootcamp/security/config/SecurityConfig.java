@@ -68,7 +68,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/cursos/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/cursos/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api//v1/cursos/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/cursos/**").hasAuthority("ROLE_ADMIN")  
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/cursos/**").hasAuthority("ROLE_ADMIN")
 
 
