@@ -14,7 +14,6 @@ import ContactPage from './modules/contact/pages/ContactPage';
 import { CartProvider } from './modules/cart/context/CartContext';
 import { AuthProvider } from './modules/auth/hook/useAuth.jsx';
 
-
 function App() {
   return (
     <BrowserRouter>

@@ -19,22 +19,6 @@ export const CartProvider = ({ children }) => {
   const [total, setTotal] = useState(0);
   const { user, isAuthenticated } = useAuth(); // Usar el estado del AuthContext
 
-  // Verificar autenticación al cargar
-  useEffect(() => {
-    const checkAuth = () => {
-      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
-      const user = JSON.parse(localStorage.getItem('user') || sessionStorage.getItem('user') || 'null');
-      setIsAuthenticated(!!token);
-      setCurrentUser(user);
-    };
-    
-    checkAuth();
-    
-    // Escuchar cambios en el storage
-    window.addEventListener('storage', checkAuth);
-    return () => window.removeEventListener('storage', checkAuth);
-  }, []);
-
   // Función para obtener la clave del carrito por usuario
   const getCartKey = (userId) => {
     return userId ? `cart_user_${userId}` : 'cart_guest';
@@ -122,8 +106,8 @@ export const CartProvider = ({ children }) => {
   const clearCart = () => {
     if (!isAuthenticated) return;
     setCartItems([]);
-    if (currentUser?.email) {
-      const cartKey = getCartKey(currentUser.email);
+    if (user?.email) {
+      const cartKey = getCartKey(user.email);
       localStorage.removeItem(cartKey);
     }
   };
