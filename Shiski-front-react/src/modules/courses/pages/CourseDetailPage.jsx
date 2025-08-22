@@ -5,6 +5,7 @@ import { useCart } from '../../cart/context/CartContext';
 import cursoService from '../../api/services/cursoService';
 import LoadingSpinner from '../../layouts/components/LoadingSpinner';
 import Toast from '../../layouts/components/Toast';
+import AuthModal from '../../layouts/components/AuthModal';
 import useLoadingWithTimeout from '../../layouts/hook/useLoadingWithTimeout';
 import '../styles/CourseDetail.css';
 
@@ -15,37 +16,23 @@ export default function CourseDetailPage() {
   const [curso, setCurso] = useState(null);
   const [error, setError] = useState(null);
   const [toast, setToast] = useState({ show: false, message: '', variant: 'success' });
-  
-  const { loading, showTimeout } = useLoadingWithTimeout({
-    initialLoading: true,
-    timeoutDuration: 50000
-  });
-  
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const { loading, progress, showTimeout, startLoading, stopLoading } = useLoadingWithTimeout();
+
   useEffect(() => {
     const fetchCurso = async () => {
+      if (!id) return;
+      
+      startLoading();
       try {
         const data = await cursoService.getCursoById(id);
         setCurso(data);
         setError(null);
-      } catch (err) {
-        console.error('Error al cargar curso:', err);
-        setError(err);
-        setToast({
-          show: true,
-          message: 'Error al cargar el curso. Mostrando datos de ejemplo.',
-          variant: 'warning'
-        });
-        // Fallback para curso no encontrado
-        setCurso({
-          id: parseInt(id) || 0,
-          titulo: 'Curso no encontrado',
-          precio: 0,
-          imagenMiniatura: '',
-          descripcion: 'Lo sentimos, el curso que buscas no existe.',
-          objetivos: [],
-          requisitos: [],
-          testimonios: []
-        });
+      } catch (error) {
+        console.error('Error al cargar curso:', error);
+        setError('No se pudo cargar el curso');
+      } finally {
+        stopLoading();
       }
     };
 
@@ -58,16 +45,21 @@ export default function CourseDetailPage() {
     try {
       const result = addToCart({
         id: curso.id,
+        titulo: curso.titulo,
         name: curso.titulo,
         price: curso.precio,
         img: curso.imagenMiniatura
       });
       
-      setToast({
-        show: true,
-        message: result.message,
-        variant: result.success ? 'success' : 'warning'
-      });
+      if (result.requiresAuth) {
+        setShowAuthModal(true);
+      } else {
+        setToast({
+          show: true,
+          message: result.message,
+          variant: result.success ? 'success' : 'warning'
+        });
+      }
     } catch (error) {
       setToast({
         show: true,
@@ -88,201 +80,143 @@ export default function CourseDetailPage() {
     });
   };
 
-  if (loading || !curso) {
+  if (loading) {
+    return <LoadingSpinner progress={progress} showTimeout={showTimeout} />;
+  }
+
+  if (error) {
     return (
-      <div className="course-detail-container">
-        <div className="container">
-          <LoadingSpinner 
-            message={showTimeout ? "La carga está tomando más tiempo del esperado..." : "Cargando detalles del curso..."}
-            showProgress={true}
-            size="lg"
-          />
+      <div className="container mt-5">
+        <div className="alert alert-danger" role="alert">
+          {error}
         </div>
+        <Link to="/courses" className="btn btn-primary">
+          <FaArrowLeft className="me-2" />
+          Volver a Cursos
+        </Link>
+      </div>
+    );
+  }
+
+  if (!curso) {
+    return (
+      <div className="container mt-5">
+        <div className="alert alert-warning" role="alert">
+          Curso no encontrado
+        </div>
+        <Link to="/courses" className="btn btn-primary">
+          <FaArrowLeft className="me-2" />
+          Volver a Cursos
+        </Link>
       </div>
     );
   }
 
   return (
-    <div className="course-detail-container">
-      <div className="container">
-        <Link to="/courses" className="back-link">
-          <FaArrowLeft className="me-2" /> Volver a cursos
-        </Link>
-        
-        <div className="course-header">
-          <h1>{curso.titulo}</h1>
-          <div className="course-price">${curso.precio?.toLocaleString('es-CL')}</div>
-          <div className="course-actions">
-            <button 
-              className="enroll-button me-3"
-              onClick={handleAddToCart}
-              disabled={!curso.id}
-            >
-              <FaShoppingCart className="me-2" /> Agregar al carrito
-            </button>
-            <button 
-              className="enroll-button"
-              onClick={handleEnrollNow}
-              disabled={!curso.id}
-            >
-              Inscribirse ahora
-            </button>
-          </div>
+    <div className="course-detail-page">
+      <div className="container py-5">
+        {/* Botón de regreso */}
+        <div className="mb-4">
+          <Link to="/courses" className="btn btn-outline-secondary">
+            <FaArrowLeft className="me-2" />
+            Volver a Cursos
+          </Link>
         </div>
 
-        <div className="course-content">
-          <div className="course-tabs">
-            <button 
-              className={`tab-button ${activeTab === 'descripcion' ? 'active' : ''}`}
-              onClick={() => setActiveTab('descripcion')}
-            >
-              Descripción
-            </button>
-            <button 
-              className={`tab-button ${activeTab === 'contenido' ? 'active' : ''}`}
-              onClick={() => setActiveTab('contenido')}
-            >
-              Contenido
-            </button>
-            <button 
-              className={`tab-button ${activeTab === 'requisitos' ? 'active' : ''}`}
-              onClick={() => setActiveTab('requisitos')}
-            >
-              Requisitos
-            </button>
-            <button 
-              className={`tab-button ${activeTab === 'testimonios' ? 'active' : ''}`}
-              onClick={() => setActiveTab('testimonios')}
-            >
-              Testimonios
-            </button>
-          </div>
+        <div className="row">
+          <div className="col-lg-8">
+            {/* Imagen del curso */}
+            <div className="course-image-container mb-4">
+              <img 
+                src={curso.imagenMiniatura || '/default-course.jpg'} 
+                alt={curso.titulo}
+                className="img-fluid rounded"
+              />
+            </div>
 
-          <div className="tab-content">
-            {activeTab === 'descripcion' && (
-              <div className="description-tab">
-                <p>{curso.descripcion || 'Sistema de gestión de inventarios avanzado que monitorea en tiempo real el estado de materiales, reduce costos y mejora la eficiencia de los procesos de la empresa.'}</p>
-              </div>
-            )}
+            {/* Tabs de contenido */}
+            <div className="course-tabs">
+              <ul className="nav nav-tabs mb-4">
+                <li className="nav-item">
+                  <button 
+                    className={`nav-link ${activeTab === 'descripcion' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('descripcion')}
+                  >
+                    Descripción
+                  </button>
+                </li>
+                <li className="nav-item">
+                  <button 
+                    className={`nav-link ${activeTab === 'contenido' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('contenido')}
+                  >
+                    Contenido
+                  </button>
+                </li>
+              </ul>
 
-            {activeTab === 'contenido' && (
-              <div className="content-tab">
-                <ul className="content-list">
-                  {curso.temario ? (
-                    // Si temario es un string, lo dividimos por líneas o puntos
-                    curso.temario.split('\n').filter(item => item.trim()).map((item, index) => (
-                      <li key={index} className="content-item">
-                        <span className="content-icon">✓</span>
-                        {item.trim()}
-                      </li>
-                    ))
-                  ) : (
-                    <>
-                      <li className="content-item"><span className="content-icon">✓</span> Introducción a la gestión de inventarios</li>
-                      <li className="content-item"><span className="content-icon">✓</span> Técnicas de optimización de stock</li>
-                      <li className="content-item"><span className="content-icon">✓</span> Análisis de datos para la toma de decisiones</li>
-                      <li className="content-item"><span className="content-icon">✓</span> Implementación de sistemas automatizados</li>
-                      <li className="content-item"><span className="content-icon">✓</span> Casos prácticos y ejercicios</li>
-                    </>
-                  )}
-                </ul>
-              </div>
-            )}
-
-            {activeTab === 'requisitos' && (
-              <div className="requirements-tab">
-                <ul className="requirements-list">
-                  {curso.requisitos && Array.isArray(curso.requisitos) ? (
-                    curso.requisitos.map((req, index) => (
-                      <li key={index} className="requirement-item">{req}</li>
-                    ))
-                  ) : curso.requisitos && typeof curso.requisitos === 'string' ? (
-                    // Si requisitos es un string, dividirlo por líneas
-                    curso.requisitos.split('\n').filter(req => req.trim()).map((req, index) => (
-                      <li key={index} className="requirement-item">{req.trim()}</li>
-                    ))
-                  ) : (
-                    <>
-                      <li className="requirement-item">Conocimientos básicos de administración</li>
-                      <li className="requirement-item">Experiencia previa en manejo de inventarios (deseable)</li>
-                      <li className="requirement-item">Acceso a computadora con conexión a internet</li>
-                      <li className="requirement-item">Disponibilidad de 4-6 horas semanales para el curso</li>
-                    </>
-                  )}
-                </ul>
-              </div>
-            )}
-
-            {activeTab === 'testimonios' && (
-              <div className="testimonials-tab">
-                {curso.testimonios && curso.testimonios.length > 0 ? (
-                  curso.testimonios.map((testimonial, index) => (
-                    <div key={index} className="testimonial-card">
-                      <div className="testimonial-header">
-                        <img 
-                          src={testimonial.avatar || `https://randomuser.me/api/portraits/${index % 2 === 0 ? 'women' : 'men'}/${30 + index}.jpg`} 
-                          alt={testimonial.nombre || `Usuario ${index + 1}`} 
-                          className="testimonial-avatar" 
-                        />
-                        <div>
-                          <h4>{testimonial.nombre || `Usuario ${index + 1}`}</h4>
-                          <div className="testimonial-rating">
-                            {[...Array(5)].map((_, i) => (
-                              <span key={i} className={i < (testimonial.rating || 5) ? 'star filled' : 'star'}>★</span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                      <p className="testimonial-text">{testimonial.comentario || testimonial.text}</p>
-                    </div>
-                  ))
-                ) : (
-                  <>
-                    <div className="testimonial-card">
-                      <div className="testimonial-header">
-                        <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Sofia Ríos" className="testimonial-avatar" />
-                        <div>
-                          <h4>Sofia Ríos</h4>
-                          <div className="testimonial-rating">
-                            {[...Array(5)].map((_, i) => (
-                              <span key={i} className={i < 5 ? 'star filled' : 'star'}>★</span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                      <p className="testimonial-text">Excelente curso, muy completo y práctico. Aprendí mucho sobre gestión de inventarios y ahora puedo aplicarlo en mi empresa.</p>
-                    </div>
-                    
-                    <div className="testimonial-card">
-                      <div className="testimonial-header">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Carlos López" className="testimonial-avatar" />
-                        <div>
-                          <h4>Carlos López</h4>
-                          <div className="testimonial-rating">
-                            {[...Array(5)].map((_, i) => (
-                              <span key={i} className={i < 4 ? 'star filled' : 'star'}>★</span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                      <p className="testimonial-text">Muy buen contenido, me ha servido muchísimo en mi trabajo. Sin embargo, me gustaría que hubiera tenido más ejercicios prácticos.</p>
-                    </div>
-                  </>
+              <div className="tab-content">
+                {activeTab === 'descripcion' && (
+                  <div className="tab-pane active">
+                    <p>{curso.descripcion || 'Sin descripción disponible'}</p>
+                  </div>
+                )}
+                {activeTab === 'contenido' && (
+                  <div className="tab-pane active">
+                    <p>Contenido del curso próximamente...</p>
+                  </div>
                 )}
               </div>
-            )}
+            </div>
+          </div>
+
+          <div className="col-lg-4">
+            {/* Card de información del curso */}
+            <div className="course-info-card">
+              <div className="card">
+                <div className="card-body">
+                  <h3 className="card-title">{curso.titulo}</h3>
+                  <div className="course-price mb-3">
+                    <span className="h4 text-primary">
+                      ${curso.precio?.toLocaleString('es-CL')}
+                    </span>
+                  </div>
+                  
+                  <div className="d-grid gap-2">
+                    <button 
+                      className="btn btn-primary btn-lg"
+                      onClick={handleAddToCart}
+                    >
+                      <FaShoppingCart className="me-2" />
+                      Agregar al Carrito
+                    </button>
+                    <button 
+                      className="btn btn-success btn-lg"
+                      onClick={handleEnrollNow}
+                    >
+                      Inscribirse Ahora
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Modal de autenticación */}
+      <AuthModal 
+        show={showAuthModal}
+        onHide={() => setShowAuthModal(false)}
+      />
       
-      {toast.show && (
-        <Toast
-          message={toast.message}
-          variant={toast.variant}
-          onClose={() => setToast({ ...toast, show: false })}
-          position="top-right"
-        />
-      )}
+      {/* Toast component */}
+      <Toast 
+        show={toast.show}
+        onClose={() => setToast({ ...toast, show: false })}
+        message={toast.message}
+        variant={toast.variant}
+      />
     </div>
   );
 }

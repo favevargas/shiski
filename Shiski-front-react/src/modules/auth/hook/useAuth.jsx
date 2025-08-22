@@ -6,6 +6,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [cartClearCallback, setCartClearCallback] = useState(null);
 
   useEffect(() => {
     // Verificar si hay un usuario autenticado al cargar la aplicación
@@ -42,7 +43,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Función para registrar el callback de limpieza del carrito
+  const registerCartClearCallback = (callback) => {
+    setCartClearCallback(() => callback);
+  };
+
   const logout = () => {
+    // Limpiar carrito antes de hacer logout
+    if (cartClearCallback) {
+      cartClearCallback();
+    }
+    
     authService.logout();
     setUser(null);
   };
@@ -57,6 +68,7 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
+    registerCartClearCallback,
     isAuthenticated: !!user,
     isAdmin
   };

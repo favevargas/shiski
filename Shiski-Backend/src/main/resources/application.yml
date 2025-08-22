@@ -4,4 +4,3 @@ spring:
     name: shiski
   profiles:
     active: prod #Cambia a 'developer', 'production' según corresponda
-
