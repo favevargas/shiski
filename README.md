@@ -24,7 +24,7 @@ Es el conjunto de herramientas, lenguajes y frameworks utilizados para desarroll
 - **Spring Boot**: Framework para crear aplicaciones Java modernas, incluyendo REST APIs, seguridad, validaciones, etc.
 - **JPA / Hibernate**: Abstracción para trabajar con bases de datos desde código Java sin necesidad de escribir SQL.
 - **Maven**: Gestor de dependencias y construcción del proyecto.
-- **MySQL**: Base de datos relacional donde se guardan los datos de usuarios, cursos, pedidos, etc.
+- **PostgreSQL**: Base de datos relacional donde se guardan los datos de usuarios, cursos, pedidos, etc.
 - **Swagger / OpenAPI**: Permite documentar y probar los endpoints de la API.
 
 ### Frontend (interfaz gráfica)
@@ -39,7 +39,7 @@ Es el conjunto de herramientas, lenguajes y frameworks utilizados para desarroll
 
 ## 📁 Estructura del Proyecto
 
-### Backend (carpeta: `tiendita`)
+### Backend (carpeta: `Shiski-Backend`)
 
 El backend está construido con Spring Boot y sigue la arquitectura típica MVC con DTOs y capas de servicio.
 
@@ -52,7 +52,7 @@ El backend está construido con Spring Boot y sigue la arquitectura típica MVC 
 - `config/` - Configuraciones como seguridad (JWT), Swagger y CORS.
 - `entity/` - Representación en Java de las tablas de la base de datos.
 
-### Frontend (carpeta: `shiski-front-react/shiski-front`)
+### Frontend (carpeta: `Shiski-front-react`)
 
 - `src/`
   - `assets/` - Imágenes y SVGs usados en la interfaz.
@@ -134,7 +134,7 @@ erDiagram
 
 ## 🛠️ Construcción de la Base de Datos
 
-1. Diseño inicial en MySQL Workbench (ver imagen adjunta o archivo `.docx`)
+1. Diseño inicial en PostgreSQL Workbench (ver imagen adjunta o archivo `.docx`)
 2. Creación de tablas y relaciones con el script `shiski_database.sql`
 3. Carga de datos de ejemplo desde `shiski_sample_data.sql`
 4. Enlace con entidades JPA (`@Entity`) en Spring Boot usando `@ManyToOne`, `@OneToMany`, etc.
@@ -162,18 +162,18 @@ erDiagram
 
 - Node.js y npm (para frontend)
 - Java 17 y Maven (para backend)
-- MySQL Server
+- PostgreSQL Server
 
 ### Instrucciones de ejecución local
 
 ```bash
 # Clonar el repositorio
 # Backend
-cd backend/tiendita
+cd  Shiski-Backend
 mvn spring-boot:run
 
 # Frontend
-cd shiski-front-react/shiski-front
+cd  shiski-front-react
 npm install
 npm run dev
 ```
@@ -182,7 +182,7 @@ npm run dev
 
 ## ✅ Pruebas y Cobertura
 
-- Pruebas unitarias con JUnit y Mockito
+- Pruebas unitarias con JUnit
 - Pruebas de endpoints con Postman/Bruno
 - Cobertura de seguridad y validaciones de datos
 
@@ -212,15 +212,14 @@ npm run dev
 
 ## 👥 Autores
 
-- **Tamara Escobar** – Desarrollo completo del backend (APIs, base de datos en MySQL y conexión con IntelliJ), documentación general, 85% preparación del primer pitch, 25% exposición del pitch y 10% del diseño UI/UX en Figma.
-- **Carolina Muñoz** – 15% del primer pitch, 25% de la exposición, 90% del diseño UI/UX en Figma, 70% del desarrollo del frontend (React).
-- **Camila Cáceres** – 25% de la exposición del pitch, 30% del desarrollo del frontend (React).
-- **Fabián Vargas**  – 25% exposición del pitch y apoyo general con tareas mínimas.
-- **Franco Ramirez** – apoyo general con tareas mínimas.
+- **Carolina Muñoz**
+- **Tamara Escobar**
+- **Camila Cáceres** 
+- **Fabián Vargas**  
+- **Franco Ramirez**
 
 ---
 
 ## 📝 Licencia
 
 Este proyecto ha sido desarrollado con fines **educativos**. Todos los derechos pertenecen a sus respectivos autores y al bootcamp de formación. No se autoriza su uso con fines comerciales sin autorización expresa.
-
