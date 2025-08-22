@@ -30,7 +30,7 @@ public class SecurityConfig {
     // 🔹 Se puede cambiar en application.properties
     @Value("${app.security.cors.dev:true}")
     private boolean devCorsEnabled;
-    @Value("${IP_BACKEND")
+    @Value("${IP_BACKEND}")
     private String ipBackend;
 
     @Value("${IP_FRONTEND}")
