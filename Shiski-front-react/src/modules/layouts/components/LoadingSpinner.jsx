@@ -30,7 +30,7 @@ export default function LoadingSpinner({
                     aria-valuenow={progress} 
                     aria-valuemin="0" 
                     aria-valuemax="100">
-                        {progress}%
+                        
                     </div>
                 </div>
             )} 
