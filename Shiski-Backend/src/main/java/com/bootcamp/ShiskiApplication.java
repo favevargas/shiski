@@ -21,7 +21,7 @@ public class ShiskiApplication {
 
 		System.setProperty("IP_BACKEND", dotenv.get("IP_BACKEND", ""));
 		System.setProperty("IP_FRONTEND", dotenv.get("IP_FRONTEND", ""));
-		System.setProperty("IP_LOCAL", dotenv.get("IP_LOCAL", ""));
+		System.setProperty("IP_LOCAL_FRONT", dotenv.get("IP_LOCAL_FRONT", ""));
 
 		SpringApplication.run(ShiskiApplication.class, args);
 	}

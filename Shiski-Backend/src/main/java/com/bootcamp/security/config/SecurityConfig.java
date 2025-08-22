@@ -36,7 +36,7 @@ public class SecurityConfig {
     @Value("${IP_FRONTEND}")
     private String ipFrontend;
 
-    @Value("${IP_LOCAL}")
+    @Value("${IP_LOCAL_FRONT}")
     private String ipLocal;
 
 
