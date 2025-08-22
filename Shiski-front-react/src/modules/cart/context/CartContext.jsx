@@ -17,55 +17,9 @@ export const useCart = () => {
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [total, setTotal] = useState(0);
-  const { user, isAuthenticated } = useAuth(); // Usar el estado del AuthContext
+  const { user, isAuthenticated } = useAuth(); // ✅ Usando AuthContext
 
-  // Función para obtener la clave del carrito por usuario
-  const getCartKey = (userId) => {
-    return userId ? `cart_user_${userId}` : 'cart_guest';
-  };
-
-  // Cargar carrito desde localStorage cuando cambia el usuario
-  useEffect(() => {
-    if (isAuthenticated && user?.email) {
-      // Usuario autenticado: cargar su carrito específico
-      const cartKey = getCartKey(user.email);
-      const storedCart = localStorage.getItem(cartKey);
-      if (storedCart) {
-        const parsedCart = JSON.parse(storedCart);
-        setCartItems(parsedCart);
-        calculateTotal(parsedCart);
-      } else {
-        // Si no hay carrito guardado, inicializar vacío
-        setCartItems([]);
-        setTotal(0);
-      }
-    } else {
-      // Usuario no autenticado: limpiar carrito
-      setCartItems([]);
-      setTotal(0);
-    }
-  }, [user, isAuthenticated]);
-
-  // Actualizar localStorage cuando cambia el carrito (solo si está autenticado)
-  useEffect(() => {
-    if (isAuthenticated && user?.email) {
-      const cartKey = getCartKey(user.email);
-      if (cartItems.length > 0) {
-        localStorage.setItem(cartKey, JSON.stringify(cartItems));
-      } else {
-        localStorage.removeItem(cartKey);
-      }
-    }
-    calculateTotal(cartItems);
-  }, [cartItems, user, isAuthenticated]);
-
-  // Calcular el total del carrito
-  const calculateTotal = (items) => {
-    const sum = items.reduce((acc, item) => acc + item.price, 0);
-    setTotal(sum);
-  };
-
-  // Agregar un curso al carrito (solo si está autenticado)
+  // ✅ La función addToCart verifica correctamente la autenticación
   const addToCart = (course) => {
     if (!isAuthenticated) {
       return { 
